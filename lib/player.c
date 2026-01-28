@@ -738,3 +738,4 @@ uint32_t Player_GetHydraReactorAngle(void *player) {
 
 float Player_GetTrainSpeed(void *player) {
   return api.Player.GetTrainSpeed(player);
+}
