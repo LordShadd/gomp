@@ -45,9 +45,14 @@ extern bool onPlayerGiveDamage(struct EventArgs_onPlayerGiveDamage *args);
 extern bool onPlayerTakeDamage(struct EventArgs_onPlayerTakeDamage *args);
 extern bool
 onPlayerGiveDamageActor(struct EventArgs_onPlayerGiveDamageActor *args);
-// extern bool onPlayerWeaponShot();
+extern bool onPlayerShotMissed(struct EventArgs_onPlayerShotMissed *args);
+extern bool onPlayerShotObject(struct EventArgs_onPlayerShotObject *args);
+extern bool onPlayerShotPlayer(struct EventArgs_onPlayerShotPlayer *args);
+extern bool
+onPlayerShotPlayerObject(struct EventArgs_onPlayerShotPlayerObject *args);
+extern bool onPlayerShotVehicle(struct EventArgs_onPlayerShotVehicle *args);
 extern bool onPlayerPickUpPickup(struct EventArgs_onPlayerPickUpPickup *args);
-// extern bool onPlayerObjectMoved();
+extern bool onPlayerObjectMove(struct EventArgs_onPlayerObjectMove *args);
 extern bool onPlayerEditObject(struct EventArgs_onPlayerEditObject *args);
 extern bool
 onPlayerEditAttachedObject(struct EventArgs_onPlayerEditAttachedObject *args);
@@ -71,11 +76,10 @@ extern bool onRconLoginAttempt(struct EventArgs_onRconLoginAttempt *args);
 extern bool onConsoleText(struct EventArgs_onConsoleText *args);
 extern bool onDialogResponse(struct EventArgs_onDialogResponse *args);
 
-// Vehicle Events
 extern bool onVehicleSpawn(struct EventArgs_onVehicleSpawn *args);
 extern bool onVehicleDeath(struct EventArgs_onVehicleDeath *args);
 extern bool onVehicleMod(struct EventArgs_onVehicleMod *args);
-// extern bool onVehiclePaintjob();
+extern bool onVehiclePaintJob(struct EventArgs_onVehiclePaintJob *args);
 extern bool onVehicleRespray(struct EventArgs_onVehicleRespray *args);
 extern bool
 onVehicleDamageStatusUpdate(struct EventArgs_onVehicleDamageStatusUpdate *args);
@@ -89,7 +93,7 @@ extern bool onTrailerUpdate(struct EventArgs_onTrailerUpdate *args);
 
 extern bool onActorStreamIn(struct EventArgs_onActorStreamIn *args);
 extern bool onActorStreamOut(struct EventArgs_onActorStreamOut *args);
-// extern bool onObjectMoved();
+extern bool onObjectMove(struct EventArgs_onObjectMove *args);
 extern bool onEnterExitModShop(struct EventArgs_onEnterExitModShop *args);
 
 extern void entryPoint();
