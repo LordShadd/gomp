@@ -14,7 +14,9 @@ package gomp
 #endif
 */
 import "C"
-import "unsafe"
+import (
+	"unsafe"
+)
 
 const InvalidPlayerID = 0xFFFF
 
@@ -38,6 +40,25 @@ func PlayerFromPointer(ptr unsafe.Pointer) *Player {
 	}
 
 	return &Player{ptr}
+}
+
+func PlayerGetAnimationName(index int) (string, string, bool) {
+	var lib, name C.struct_CAPIStringView
+
+	ret := C.Player_GetAnimationName(
+		C.int(index),
+		&lib,
+		&name,
+	)
+
+	if !bool(ret) {
+		return "", "", false
+	}
+
+	sLib := C.GoStringN(lib.data, C.int(lib.len))
+	sName := C.GoStringN(name.data, C.int(name.len))
+
+	return sLib, sName, true
 }
 
 func (p *Player) GetID() int {
@@ -1154,6 +1175,35 @@ func (p *Player) HasGameText(style int) bool {
 	return bool(C.Player_HasGameText(p.ptr, C.int(style)))
 }
 
+func (p *Player) GetGameText(style int) (string, int, int, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return "", 0, 0, false
+	}
+
+	var messageView C.struct_CAPIStringView
+	var time, remaining C.int
+
+	ret := C.Player_GetGameText(
+		p.ptr,
+		C.int(style),
+		&messageView,
+		&time,
+		&remaining,
+	)
+
+	if !bool(ret) {
+		return "", 0, 0, false
+	}
+
+	var message string
+
+	if messageView.data != nil {
+		message = C.GoStringN(messageView.data, C.int(messageView.len))
+	}
+
+	return message, int(time), int(remaining), true
+}
+
 func (p *Player) SendDeathMessage(killer, killee *Player, weapon int) bool {
 	var kPtr, kePtr unsafe.Pointer
 
@@ -1261,12 +1311,55 @@ func (p *Player) GetGravity() float32 {
 	return float32(C.Player_GetGravity(p.ptr))
 }
 
+func (p *Player) IsAdmin() bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	return bool(C.Player_IsAdmin(p.ptr))
+}
+
 func (p *Player) SetAdmin(set bool) bool {
 	if p == nil || p.ptr == nil || p.GetID() == -1 {
 		return false
 	}
 
 	return bool(C.Player_SetAdmin(p.ptr, C.bool(set)))
+}
+
+func (p *Player) Kick() bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	return bool(C.Player_Kick(p.ptr))
+}
+
+func (p *Player) Ban() bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	return bool(C.Player_Ban(p.ptr))
+}
+
+func (p *Player) BanEx(reason string) bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	cReason := C.CString(reason)
+	defer C.free(unsafe.Pointer(cReason))
+
+	return bool(C.Player_BanEx(p.ptr, cReason))
+}
+
+func (p *Player) Spawn() bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	return bool(C.Player_Spawn(p.ptr))
 }
 
 func (p *Player) IsSpawned() bool {
@@ -1467,4 +1560,154 @@ func (p *Player) NetStatsMessagesSent() int {
 	}
 
 	return int(C.Player_NetStatsMessagesSent(p.ptr))
+}
+
+func (p *Player) NetStatsGetIpPort() (string, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return "", false
+	}
+
+	var ipPortBuffer C.struct_CAPIStringBuffer
+	ret := C.Player_NetStatsGetIpPort(p.ptr, &ipPortBuffer)
+
+	if !bool(ret) || ipPortBuffer.data == nil {
+		return "", false
+	}
+
+	return C.GoStringN(ipPortBuffer.data, C.int(ipPortBuffer.len)), true
+}
+
+func (p *Player) SetFacingAngle(angle float32) bool {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return false
+	}
+
+	return bool(C.Player_SetFacingAngle(p.ptr, C.float(angle)))
+}
+
+func (p *Player) GetIp() (string, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return "", false
+	}
+
+	var ipBuffer C.struct_CAPIStringBuffer
+	ret := C.Player_GetIp(p.ptr, &ipBuffer)
+
+	if ret == 0 || ipBuffer.data == nil {
+		return "", false
+	}
+
+	return C.GoStringN(ipBuffer.data, C.int(ipBuffer.len)), true
+}
+
+func (p *Player) GPCI() (string, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return "", false
+	}
+
+	var gpciView C.struct_CAPIStringView
+	ret := C.Player_GPCI(p.ptr, &gpciView)
+
+	if !bool(ret) || gpciView.data == nil {
+		return "", false
+	}
+
+	return C.GoStringN(gpciView.data, C.int(gpciView.len)), true
+}
+
+func (p *Player) GetVersion() (string, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return "", false
+	}
+
+	var versionView C.struct_CAPIStringView
+	ret := C.Player_GetVersion(p.ptr, &versionView)
+
+	if ret == 0 || versionView.data == nil {
+		return "", false
+	}
+
+	return C.GoStringN(versionView.data, C.int(versionView.len)), true
+}
+
+func (p *Player) GetMenu() unsafe.Pointer {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return nil
+	}
+
+	return C.Player_GetMenu(p.ptr)
+}
+
+func (p *Player) GetSurfingPlayerObject() unsafe.Pointer {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return nil
+	}
+
+	return C.Player_GetSurfingPlayerObject(p.ptr)
+}
+
+func (p *Player) GetCameraTargetPlayerObject() unsafe.Pointer {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return nil
+	}
+
+	return C.Player_GetCameraTargetPlayerObject(p.ptr)
+}
+
+func (p *Player) GetAttachedObject(index int) (int, int, float32, float32, float32, float32, float32, float32, float32, float32, float32, int, int, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false
+	}
+
+	var model, bone C.int
+	var ox, oy, oz, rx, ry, rz, sx, sy, sz C.float
+	var c1, c2 C.int
+
+	ret := C.Player_GetAttachedObject(
+		p.ptr,
+		C.int(index),
+		&model,
+		&bone,
+		&ox, &oy, &oz,
+		&rx, &ry, &rz,
+		&sx, &sy, &sz,
+		&c1,
+		&c2,
+	)
+
+	return int(model), int(bone),
+		float32(ox), float32(oy), float32(oz),
+		float32(rx), float32(ry), float32(rz),
+		float32(sx), float32(sy), float32(sz),
+		int(c1), int(c2), bool(ret)
+}
+
+func (p *Player) GetDialogData() (int, int, string, string, string, string, bool) {
+	if p == nil || p.ptr == nil || p.GetID() == -1 {
+		return 0, 0, "", "", "", "", false
+	}
+
+	var dialogID, style C.int
+	var titleView, bodyView, b1View, b2View C.struct_CAPIStringView
+
+	ret := C.Player_GetDialogData(
+		p.ptr,
+		&dialogID,
+		&style,
+		&titleView,
+		&bodyView,
+		&b1View,
+		&b2View,
+	)
+
+	if !bool(ret) {
+		return 0, 0, "", "", "", "", false
+	}
+
+	title := C.GoStringN(titleView.data, C.int(titleView.len))
+	body := C.GoStringN(bodyView.data, C.int(bodyView.len))
+	b1 := C.GoStringN(b1View.data, C.int(b1View.len))
+	b2 := C.GoStringN(b2View.data, C.int(b2View.len))
+
+	return int(dialogID), int(style), title, body, b1, b2, true
 }
