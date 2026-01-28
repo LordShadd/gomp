@@ -12,6 +12,7 @@ package gomp
 
 #include "main.c"
 #include "player.c"
+#include "vehicle.c"
 #include "event.c"
 
 #endif
