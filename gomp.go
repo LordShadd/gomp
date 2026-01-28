@@ -9,7 +9,10 @@ package gomp
 #define GOMP
 
 #include "main.h"
+
 #include "main.c"
+#include "player.c"
+#include "event.c"
 
 #endif
 */
