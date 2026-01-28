@@ -11,387 +11,387 @@ C-API: https://github.com/openmultiplayer/open.mp-capi
 API wrappers.
 
 
-- [ ] **Player**
+- [x] **Player**
 
-    - [ ] SetSpawnInfo
+    - [x] SetSpawnInfo
 
-    - [ ] GetSpawnInfo
+    - [x] GetSpawnInfo
 
-    - [ ] GetNetworkStats
+    - [x] GetNetworkStats
 
-    - [ ] NetStatsBytesReceived
+    - [x] NetStatsBytesReceived
 
-    - [ ] NetStatsBytesSent
+    - [x] NetStatsBytesSent
 
-    - [ ] NetStatsConnectionStatus
+    - [x] NetStatsConnectionStatus
 
-    - [ ] NetStatsGetConnectedTime
+    - [x] NetStatsGetConnectedTime
 
-    - [ ] NetStatsGetIpPort
+    - [x] NetStatsGetIpPort
 
-    - [ ] NetStatsMessagesReceived
+    - [x] NetStatsMessagesReceived
 
-    - [ ] NetStatsMessagesRecvPerSecond
+    - [x] NetStatsMessagesRecvPerSecond
 
-    - [ ] NetStatsMessagesSent
+    - [x] NetStatsMessagesSent
 
-    - [ ] NetStatsPacketLossPercent
+    - [x] NetStatsPacketLossPercent
 
-    - [ ] GetCustomSkin
+    - [x] GetCustomSkin
 
-    - [ ] GetDialog
+    - [x] GetDialog
 
-    - [ ] GetDialogData
+    - [x] GetDialogData
 
-    - [ ] GetMenu
+    - [x] GetMenu
 
-    - [ ] GetSurfingPlayerObject
+    - [x] GetSurfingPlayerObject
 
-    - [ ] GetCameraTargetPlayerObject
+    - [x] GetCameraTargetPlayerObject
 
     - [x] FromID
 
     - [x] GetID
 
-    - [ ] SendClientMessage
+    - [x] SendClientMessage
 
-    - [ ] SetCameraPos
+    - [x] SetCameraPos
 
-    - [ ] SetDrunkLevel
+    - [x] SetDrunkLevel
 
-    - [ ] SetInterior
+    - [x] SetInterior
 
-    - [ ] SetWantedLevel
+    - [x] SetWantedLevel
 
-    - [ ] SetWeather
+    - [x] SetWeather
 
-    - [ ] GetWeather
+    - [x] GetWeather
 
-    - [ ] SetSkin
+    - [x] SetSkin
 
-    - [ ] SetShopName
+    - [x] SetShopName
 
-    - [ ] GiveMoney
+    - [x] GiveMoney
 
-    - [ ] SetCameraLookAt
+    - [x] SetCameraLookAt
 
-    - [ ] SetCameraBehind
+    - [x] SetCameraBehind
 
-    - [ ] CreateExplosion
+    - [x] CreateExplosion
 
-    - [ ] PlayAudioStream
+    - [x] PlayAudioStream
 
-    - [ ] StopAudioStream
+    - [x] StopAudioStream
 
-    - [ ] ToggleWidescreen
+    - [x] ToggleWidescreen
 
-    - [ ] IsWidescreenToggled
+    - [x] IsWidescreenToggled
 
-    - [ ] SetHealth
+    - [x] SetHealth
 
-    - [ ] GetHealth
+    - [x] GetHealth
 
-    - [ ] SetArmor
+    - [x] SetArmor
 
-    - [ ] GetArmor
+    - [x] GetArmor
 
-    - [ ] SetTeam
+    - [x] SetTeam
 
-    - [ ] GetTeam
+    - [x] GetTeam
 
-    - [ ] SetScore
+    - [x] SetScore
 
-    - [ ] GetScore
+    - [x] GetScore
 
-    - [ ] GetSkin
+    - [x] GetSkin
 
-    - [ ] SetColor
+    - [x] SetColor
 
-    - [ ] GetColor
+    - [x] GetColor
 
-    - [ ] GetDefaultColor
+    - [x] GetDefaultColor
 
-    - [ ] GetDrunkLevel
+    - [x] GetDrunkLevel
 
-    - [ ] GiveWeapon
+    - [x] GiveWeapon
 
-    - [ ] RemoveWeapon
+    - [x] RemoveWeapon
 
-    - [ ] GetMoney
+    - [x] GetMoney
 
-    - [ ] ResetMoney
+    - [x] ResetMoney
 
-    - [ ] SetName
+    - [x] SetName
 
     - [x] GetName
 
-    - [ ] GetState
+    - [x] GetState
 
-    - [ ] GetPing
+    - [x] GetPing
 
-    - [ ] GetWeapon
+    - [x] GetWeapon
 
-    - [ ] SetTime
+    - [x] SetTime
 
-    - [ ] GetTime
+    - [x] GetTime
 
-    - [ ] ToggleClock
+    - [x] ToggleClock
 
-    - [ ] HasClock
+    - [x] HasClock
 
-    - [ ] ForceClassSelection
+    - [x] ForceClassSelection
 
-    - [ ] GetWantedLevel
+    - [x] GetWantedLevel
 
-    - [ ] SetFightingStyle
+    - [x] SetFightingStyle
 
-    - [ ] GetFightingStyle
+    - [x] GetFightingStyle
 
-    - [ ] SetVelocity
+    - [x] SetVelocity
 
-    - [ ] GetVelocity
+    - [x] GetVelocity
 
-    - [ ] GetCameraPos
+    - [x] GetCameraPos
 
-    - [ ] GetDistanceFromPoint
+    - [x] GetDistanceFromPoint
 
-    - [ ] GetInterior
+    - [x] GetInterior
 
-    - [ ] SetPos
+    - [x] SetPos
 
-    - [ ] GetPos
+    - [x] GetPos
 
-    - [ ] GetVirtualWorld
+    - [x] GetVirtualWorld
 
-    - [ ] IsNPC
+    - [x] IsNPC
 
-    - [ ] IsStreamedIn
+    - [x] IsStreamedIn
 
-    - [ ] PlayGameSound
+    - [x] PlayGameSound
 
-    - [ ] SpectatePlayer
+    - [x] SpectatePlayer
 
-    - [ ] SpectateVehicle
+    - [x] SpectateVehicle
 
-    - [ ] SetVirtualWorld
+    - [x] SetVirtualWorld
 
-    - [ ] SetWorldBounds
+    - [x] SetWorldBounds
 
-    - [ ] ClearWorldBounds
+    - [x] ClearWorldBounds
 
-    - [ ] GetWorldBounds
+    - [x] GetWorldBounds
 
-    - [ ] ClearAnimations
+    - [x] ClearAnimations
 
-    - [ ] GetLastShotVectors
+    - [x] GetLastShotVectors
 
-    - [ ] GetCameraTargetPlayer
+    - [x] GetCameraTargetPlayer
 
-    - [ ] GetCameraTargetActor
+    - [x] GetCameraTargetActor
 
-    - [ ] GetCameraTargetObject
+    - [x] GetCameraTargetObject
 
-    - [ ] GetCameraTargetVehicle
+    - [x] GetCameraTargetVehicle
 
-    - [ ] PutInVehicle
+    - [x] PutInVehicle
 
-    - [ ] RemoveBuilding
+    - [x] RemoveBuilding
 
-    - [ ] GetBuildingsRemoved
+    - [x] GetBuildingsRemoved
 
-    - [ ] RemoveFromVehicle
+    - [x] RemoveFromVehicle
 
-    - [ ] RemoveMapIcon
+    - [x] RemoveMapIcon
 
-    - [ ] SetMapIcon
+    - [x] SetMapIcon
 
-    - [ ] ResetWeapons
+    - [x] ResetWeapons
 
-    - [ ] SetAmmo
+    - [x] SetAmmo
 
-    - [ ] SetArmedWeapon
+    - [x] SetArmedWeapon
 
-    - [ ] SetChatBubble
+    - [x] SetChatBubble
 
-    - [ ] SetPosFindZ
+    - [x] SetPosFindZ
 
-    - [ ] SetSkillLevel
+    - [x] SetSkillLevel
 
-    - [ ] SetSpecialAction
+    - [x] SetSpecialAction
 
-    - [ ] ShowNameTagForPlayer
+    - [x] ShowNameTagForPlayer
 
-    - [ ] ToggleControllable
+    - [x] ToggleControllable
 
-    - [ ] ToggleSpectating
+    - [x] ToggleSpectating
 
-    - [ ] ApplyAnimation
+    - [x] ApplyAnimation
 
-    - [ ] GetAnimationName
+    - [x] GetAnimationName
 
-    - [ ] EditAttachedObject
+    - [x] EditAttachedObject
 
-    - [ ] EnableCameraTarget
+    - [x] EnableCameraTarget
 
-    - [ ] EnableStuntBonus
+    - [x] EnableStuntBonus
 
-    - [ ] GetPlayerAmmo
+    - [x] GetPlayerAmmo
 
-    - [ ] GetAnimationIndex
+    - [x] GetAnimationIndex
 
-    - [ ] GetFacingAngle
+    - [x] GetFacingAngle
 
-    - [ ] GetIp
+    - [x] GetIp
 
-    - [ ] GetSpecialAction
+    - [x] GetSpecialAction
 
-    - [ ] GetVehicleID
+    - [x] GetVehicleID
 
-    - [ ] GetVehicleSeat
+    - [x] GetVehicleSeat
 
-    - [ ] GetWeaponData
+    - [x] GetWeaponData
 
-    - [ ] GetWeaponState
+    - [x] GetWeaponState
 
-    - [ ] InterpolateCameraPos
+    - [x] InterpolateCameraPos
 
-    - [ ] InterpolateCameraLookAt
+    - [x] InterpolateCameraLookAt
 
-    - [ ] IsPlayerAttachedObjectSlotUsed
+    - [x] IsPlayerAttachedObjectSlotUsed
 
-    - [ ] AttachCameraToObject
+    - [x] AttachCameraToObject
 
-    - [ ] AttachCameraToPlayerObject
+    - [x] AttachCameraToPlayerObject
 
-    - [ ] GetCameraAspectRatio
+    - [x] GetCameraAspectRatio
 
-    - [ ] GetCameraFrontVector
+    - [x] GetCameraFrontVector
 
-    - [ ] GetCameraMode
+    - [x] GetCameraMode
 
-    - [ ] GetKeys
+    - [x] GetKeys
 
-    - [ ] GetSurfingVehicle
+    - [x] GetSurfingVehicle
 
-    - [ ] GetSurfingObject
+    - [x] GetSurfingObject
 
-    - [ ] GetTargetPlayer
+    - [x] GetTargetPlayer
 
-    - [ ] GetTargetActor
+    - [x] GetTargetActor
 
-    - [ ] IsInVehicle
+    - [x] IsInVehicle
 
-    - [ ] IsInAnyVehicle
+    - [x] IsInAnyVehicle
 
-    - [ ] IsInRangeOfPoint
+    - [x] IsInRangeOfPoint
 
-    - [ ] PlayCrimeReport
+    - [x] PlayCrimeReport
 
-    - [ ] RemoveAttachedObject
+    - [x] RemoveAttachedObject
 
-    - [ ] SetAttachedObject
+    - [x] SetAttachedObject
 
-    - [ ] GetAttachedObject
+    - [x] GetAttachedObject
 
-    - [ ] SetFacingAngle
+    - [x] SetFacingAngle
 
-    - [ ] SetMarkerForPlayer
+    - [x] SetMarkerForPlayer
 
-    - [ ] GetMarkerForPlayer
+    - [x] GetMarkerForPlayer
 
-    - [ ] AllowTeleport
+    - [x] AllowTeleport
 
-    - [ ] IsTeleportAllowed
+    - [x] IsTeleportAllowed
 
-    - [ ] DisableRemoteVehicleCollisions
+    - [x] DisableRemoteVehicleCollisions
 
-    - [ ] GetCameraZoom
+    - [x] GetCameraZoom
 
-    - [ ] SelectTextDraw
+    - [x] SelectTextDraw
 
-    - [ ] CancelSelectTextDraw
+    - [x] CancelSelectTextDraw
 
-    - [ ] SendClientCheck
+    - [x] SendClientCheck
 
-    - [ ] Spawn
+    - [x] Spawn
 
-    - [ ] GPCI
+    - [x] GPCI
 
-    - [ ] IsAdmin
+    - [x] IsAdmin
 
-    - [ ] Kick
+    - [x] Kick
 
-    - [ ] ShowGameText
+    - [x] ShowGameText
 
-    - [ ] HideGameText
+    - [x] HideGameText
 
-    - [ ] HasGameText
+    - [x] HasGameText
 
-    - [ ] GetGameText
+    - [x] GetGameText
 
-    - [ ] Ban
+    - [x] Ban
 
-    - [ ] BanEx
+    - [x] BanEx
 
-    - [ ] SendDeathMessage
+    - [x] SendDeathMessage
 
-    - [ ] SendMessageToPlayer
+    - [x] SendMessageToPlayer
 
-    - [ ] GetVersion
+    - [x] GetVersion
 
-    - [ ] GetSkillLevel
+    - [x] GetSkillLevel
 
-    - [ ] GetZAim
+    - [x] GetZAim
 
-    - [ ] GetSurfingOffsets
+    - [x] GetSurfingOffsets
 
-    - [ ] GetRotationQuat
+    - [x] GetRotationQuat
 
-    - [ ] GetPlayerSpectateID
+    - [x] GetPlayerSpectateID
 
-    - [ ] GetSpectateType
+    - [x] GetSpectateType
 
-    - [ ] GetRawIp
+    - [x] GetRawIp
 
-    - [ ] SetGravity
+    - [x] SetGravity
 
-    - [ ] GetGravity
+    - [x] GetGravity
 
-    - [ ] SetAdmin
+    - [x] SetAdmin
 
-    - [ ] IsSpawned
+    - [x] IsSpawned
 
-    - [ ] IsControllable
+    - [x] IsControllable
 
-    - [ ] IsCameraTargetEnabled
+    - [x] IsCameraTargetEnabled
 
-    - [ ] ToggleGhostMode
+    - [x] ToggleGhostMode
 
-    - [ ] GetGhostMode
+    - [x] GetGhostMode
 
-    - [ ] AllowWeapons
+    - [x] AllowWeapons
 
-    - [ ] AreWeaponsAllowed
+    - [x] AreWeaponsAllowed
 
-    - [ ] IsPlayerUsingOfficialClient
+    - [x] IsPlayerUsingOfficialClient
 
-    - [ ] GetAnimationFlags
+    - [x] GetAnimationFlags
 
-    - [ ] IsInDriveByMode
+    - [x] IsInDriveByMode
 
-    - [ ] IsCuffed
+    - [x] IsCuffed
 
-    - [ ] IsUsingOmp
+    - [x] IsUsingOmp
 
-    - [ ] IsInModShop
+    - [x] IsInModShop
 
-    - [ ] GetSirenState
+    - [x] GetSirenState
 
-    - [ ] GetLandingGearState
+    - [x] GetLandingGearState
 
-    - [ ] GetHydraReactorAngle
+    - [x] GetHydraReactorAngle
 
-    - [ ] GetTrainSpeed
+    - [x] GetTrainSpeed
 
 - [ ] **Actor**
 
