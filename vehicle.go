@@ -41,6 +41,9 @@ func (v *Vehicle) Pointer() unsafe.Pointer {
 }
 
 func VehicleCreate(modelID int, x, y, z, rotation float32, color1, color2, respawnDelay int, addSiren bool) *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var vehicleID C.int
 
 	ptr := C.Vehicle_Create(
@@ -66,6 +69,9 @@ func VehicleCreate(modelID int, x, y, z, rotation float32, color1, color2, respa
 }
 
 func VehicleAddStatic(modelid int, x, y, z, angle float32, color1, color2 int) *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var vehicleID C.int
 
 	ptr := C.Vehicle_AddStatic(
@@ -87,6 +93,9 @@ func VehicleAddStatic(modelid int, x, y, z, angle float32, color1, color2 int) *
 }
 
 func VehicleAddStaticEx(modelid int, x, y, z, angle float32, color1, color2, respawnDelay int, addSiren bool) *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var vehicleID C.int
 
 	ptr := C.Vehicle_AddStaticEx(
@@ -110,6 +119,9 @@ func VehicleAddStaticEx(modelid int, x, y, z, angle float32, color1, color2, res
 }
 
 func VehicleGetModelInfo(vehicleModel, infoType int) (float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var x, y, z C.float
 
 	ret := C.Vehicle_GetModelInfo(
@@ -124,6 +136,9 @@ func VehicleGetModelInfo(vehicleModel, infoType int) (float32, float32, float32,
 }
 
 func VehicleGetRandomColorPair(modelID int) (int, int, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var c1, c2, c3, c4 C.int
 
 	ret := C.Vehicle_GetRandomColorPair(
@@ -138,22 +153,37 @@ func VehicleGetRandomColorPair(modelID int) (int, int, int, int, bool) {
 }
 
 func VehicleColorIndexToColor(colorIndex, alpha int) int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return int(C.Vehicle_ColorIndexToColor(C.int(colorIndex), C.int(alpha)))
 }
 
 func VehicleGetModelsUsed() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return int(C.Vehicle_GetModelsUsed())
 }
 
 func VehicleGetModelCount(modelID int) int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return int(C.Vehicle_GetModelCount(C.int(modelID)))
 }
 
 func VehicleEnableFriendlyFire() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return bool(C.Vehicle_EnableFriendlyFire())
 }
 
 func (v *Vehicle) Destroy() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -162,6 +192,9 @@ func (v *Vehicle) Destroy() bool {
 }
 
 func (v *Vehicle) GetID() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 
 	}
@@ -170,6 +203,9 @@ func (v *Vehicle) GetID() int {
 }
 
 func (v *Vehicle) GetMaxPassengerSeats() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -178,6 +214,9 @@ func (v *Vehicle) GetMaxPassengerSeats() int {
 }
 
 func (v *Vehicle) SetParamsCarDoors(frontLeft, frontRight, rearLeft, rearRight int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -192,6 +231,9 @@ func (v *Vehicle) SetParamsCarDoors(frontLeft, frontRight, rearLeft, rearRight i
 }
 
 func (v *Vehicle) GetParamsCarDoors() (int, int, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, false
 	}
@@ -210,6 +252,9 @@ func (v *Vehicle) GetParamsCarDoors() (int, int, int, int, bool) {
 }
 
 func (v *Vehicle) SetParamsCarWindows(frontLeft, frontRight, rearLeft, rearRight int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -224,6 +269,9 @@ func (v *Vehicle) SetParamsCarWindows(frontLeft, frontRight, rearLeft, rearRight
 }
 
 func (v *Vehicle) GetParamsCarWindows() (int, int, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, false
 	}
@@ -242,6 +290,9 @@ func (v *Vehicle) GetParamsCarWindows() (int, int, int, int, bool) {
 }
 
 func (v *Vehicle) GetMatrix() (float32, float32, float32, float32, float32, float32, float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, 0, 0, 0, 0, 0, false
 	}
@@ -262,6 +313,9 @@ func (v *Vehicle) GetMatrix() (float32, float32, float32, float32, float32, floa
 }
 
 func (v *Vehicle) GetSpawnInfo() (float32, float32, float32, float32, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, 0, 0, false
 	}
@@ -283,6 +337,9 @@ func (v *Vehicle) GetSpawnInfo() (float32, float32, float32, float32, int, int, 
 }
 
 func (v *Vehicle) SetSpawnInfo(modelID int, x, y, z, rotation float32, color1, color2, respawnTime, interior int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -302,14 +359,23 @@ func (v *Vehicle) SetSpawnInfo(modelID int, x, y, z, rotation float32, color1, c
 }
 
 func (v *Vehicle) GetComponentType(componentID int) int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return int(C.Vehicle_GetComponentType(C.int(componentID)))
 }
 
 func (v *Vehicle) CanHaveComponent(modelID, componentID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return bool(C.Vehicle_CanHaveComponent(C.int(modelID), C.int(componentID)))
 }
 
 func (v *Vehicle) SetToRespawn() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -318,6 +384,9 @@ func (v *Vehicle) SetToRespawn() bool {
 }
 
 func (v *Vehicle) LinkToInterior(interiorID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -326,6 +395,9 @@ func (v *Vehicle) LinkToInterior(interiorID int) bool {
 }
 
 func (v *Vehicle) SetNumberPlate(plate string) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -337,6 +409,9 @@ func (v *Vehicle) SetNumberPlate(plate string) bool {
 }
 
 func (v *Vehicle) GetNumberPlate() (string, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return "", false
 	}
@@ -352,6 +427,9 @@ func (v *Vehicle) GetNumberPlate() (string, bool) {
 }
 
 func (v *Vehicle) SetRespawnDelay(delay int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -360,6 +438,9 @@ func (v *Vehicle) SetRespawnDelay(delay int) bool {
 }
 
 func (v *Vehicle) GetRespawnDelay() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -368,6 +449,9 @@ func (v *Vehicle) GetRespawnDelay() int {
 }
 
 func (v *Vehicle) GetRespawnTick() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -376,6 +460,9 @@ func (v *Vehicle) GetRespawnTick() int {
 }
 
 func (v *Vehicle) GetOccupiedTick() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -384,6 +471,9 @@ func (v *Vehicle) GetOccupiedTick() int {
 }
 
 func (v *Vehicle) HasBeenOccupied() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -392,6 +482,9 @@ func (v *Vehicle) HasBeenOccupied() bool {
 }
 
 func (v *Vehicle) IsOccupied() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -400,6 +493,9 @@ func (v *Vehicle) IsOccupied() bool {
 }
 
 func (v *Vehicle) IsDead() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return true
 	}
@@ -408,6 +504,9 @@ func (v *Vehicle) IsDead() bool {
 }
 
 func (v *Vehicle) ToggleSirenEnabled(status bool) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -416,6 +515,9 @@ func (v *Vehicle) ToggleSirenEnabled(status bool) bool {
 }
 
 func (v *Vehicle) IsSirenEnabled() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -424,6 +526,9 @@ func (v *Vehicle) IsSirenEnabled() bool {
 }
 
 func (v *Vehicle) SetParamsSirenState(enabled bool) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -432,6 +537,9 @@ func (v *Vehicle) SetParamsSirenState(enabled bool) bool {
 }
 
 func (v *Vehicle) GetParamsSirenState() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -440,6 +548,9 @@ func (v *Vehicle) GetParamsSirenState() int {
 }
 
 func (v *Vehicle) GetSirenState() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -448,6 +559,9 @@ func (v *Vehicle) GetSirenState() int {
 }
 
 func (v *Vehicle) GetHydraReactorAngle() uint32 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -456,6 +570,9 @@ func (v *Vehicle) GetHydraReactorAngle() uint32 {
 }
 
 func (v *Vehicle) GetLandingGearState() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -464,6 +581,9 @@ func (v *Vehicle) GetLandingGearState() int {
 }
 
 func (v *Vehicle) GetTrainSpeed() float32 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0.0
 	}
@@ -472,6 +592,9 @@ func (v *Vehicle) GetTrainSpeed() float32 {
 }
 
 func (v *Vehicle) GetLastDriver() *Player {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -480,6 +603,9 @@ func (v *Vehicle) GetLastDriver() *Player {
 }
 
 func (v *Vehicle) GetDriver() *Player {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -488,6 +614,9 @@ func (v *Vehicle) GetDriver() *Player {
 }
 
 func (v *Vehicle) GetOccupant(seat int) *Player {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -496,6 +625,9 @@ func (v *Vehicle) GetOccupant(seat int) *Player {
 }
 
 func (v *Vehicle) CountOccupants() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -504,6 +636,9 @@ func (v *Vehicle) CountOccupants() int {
 }
 
 func (v *Vehicle) GetCab() *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -518,6 +653,9 @@ func (v *Vehicle) GetCab() *Vehicle {
 }
 
 func (v *Vehicle) GetTower() *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -532,6 +670,9 @@ func (v *Vehicle) GetTower() *Vehicle {
 }
 
 func (v *Vehicle) GetTrailer() *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return nil
 	}
@@ -546,6 +687,9 @@ func (v *Vehicle) GetTrailer() *Vehicle {
 }
 
 func (v *Vehicle) AttachTrailer(trailer *Vehicle) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil || trailer == nil || trailer.ptr == nil {
 		return false
 	}
@@ -554,6 +698,9 @@ func (v *Vehicle) AttachTrailer(trailer *Vehicle) bool {
 }
 
 func (v *Vehicle) DetachTrailer() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -562,6 +709,9 @@ func (v *Vehicle) DetachTrailer() bool {
 }
 
 func (v *Vehicle) IsTrailerAttached() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -570,6 +720,9 @@ func (v *Vehicle) IsTrailerAttached() bool {
 }
 
 func (v *Vehicle) Repair() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -578,6 +731,9 @@ func (v *Vehicle) Repair() bool {
 }
 
 func (v *Vehicle) AddComponent(componentID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -586,6 +742,9 @@ func (v *Vehicle) AddComponent(componentID int) bool {
 }
 
 func (v *Vehicle) RemoveComponent(componentID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -594,6 +753,9 @@ func (v *Vehicle) RemoveComponent(componentID int) bool {
 }
 
 func (v *Vehicle) GetComponentInSlot(slot int) int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -602,6 +764,9 @@ func (v *Vehicle) GetComponentInSlot(slot int) int {
 }
 
 func (v *Vehicle) ChangePaintjob(paintjobID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -610,6 +775,9 @@ func (v *Vehicle) ChangePaintjob(paintjobID int) bool {
 }
 
 func (v *Vehicle) GetPaintjob() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -618,6 +786,9 @@ func (v *Vehicle) GetPaintjob() int {
 }
 
 func (v *Vehicle) ChangeColor(color1, color2 int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -626,6 +797,9 @@ func (v *Vehicle) ChangeColor(color1, color2 int) bool {
 }
 
 func (v *Vehicle) GetColor() (int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, false
 	}
@@ -638,6 +812,9 @@ func (v *Vehicle) GetColor() (int, int, bool) {
 }
 
 func (v *Vehicle) UpdateDamageStatus(panels, doors, lights, tires int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -652,6 +829,9 @@ func (v *Vehicle) UpdateDamageStatus(panels, doors, lights, tires int) bool {
 }
 
 func (v *Vehicle) GetDamageStatus() (int, int, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, false
 	}
@@ -670,10 +850,16 @@ func (v *Vehicle) GetDamageStatus() (int, int, int, int, bool) {
 }
 
 func (v *Vehicle) UseManualEngineAndLights() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	return bool(C.Vehicle_UseManualEngineAndLights())
 }
 
 func (v *Vehicle) IsValid() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -682,6 +868,9 @@ func (v *Vehicle) IsValid() bool {
 }
 
 func (v *Vehicle) GetModel() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -690,6 +879,9 @@ func (v *Vehicle) GetModel() int {
 }
 
 func (v *Vehicle) IsStreamedIn(player *Player) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil || player == nil || player.ptr == nil {
 		return false
 	}
@@ -698,6 +890,9 @@ func (v *Vehicle) IsStreamedIn(player *Player) bool {
 }
 
 func (v *Vehicle) GetPos() (float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, false
 	}
@@ -710,6 +905,9 @@ func (v *Vehicle) GetPos() (float32, float32, float32, bool) {
 }
 
 func (v *Vehicle) SetPos(x, y, z float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -718,6 +916,9 @@ func (v *Vehicle) SetPos(x, y, z float32) bool {
 }
 
 func (v *Vehicle) GetZAngle() float32 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0.0
 	}
@@ -726,6 +927,9 @@ func (v *Vehicle) GetZAngle() float32 {
 }
 
 func (v *Vehicle) SetZAngle(angle float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -734,6 +938,9 @@ func (v *Vehicle) SetZAngle(angle float32) bool {
 }
 
 func (v *Vehicle) GetRotationQuat() (float32, float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, false
 	}
@@ -746,6 +953,9 @@ func (v *Vehicle) GetRotationQuat() (float32, float32, float32, float32, bool) {
 }
 
 func (v *Vehicle) GetDistanceFromPoint(x, y, z float32) float32 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0.0
 	}
@@ -754,6 +964,9 @@ func (v *Vehicle) GetDistanceFromPoint(x, y, z float32) float32 {
 }
 
 func (v *Vehicle) SetVelocity(x, y, z float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -762,6 +975,9 @@ func (v *Vehicle) SetVelocity(x, y, z float32) bool {
 }
 
 func (v *Vehicle) GetVelocity() (float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, false
 	}
@@ -774,6 +990,9 @@ func (v *Vehicle) GetVelocity() (float32, float32, float32, bool) {
 }
 
 func (v *Vehicle) SetAngularVelocity(x, y, z float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -782,6 +1001,9 @@ func (v *Vehicle) SetAngularVelocity(x, y, z float32) bool {
 }
 
 func (v *Vehicle) SetParamsEx(engine, lights, alarm, doors, bonnet, boot, objective int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -799,6 +1021,9 @@ func (v *Vehicle) SetParamsEx(engine, lights, alarm, doors, bonnet, boot, object
 }
 
 func (v *Vehicle) GetParamsEx() (int, int, int, int, int, int, int, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0, 0, 0, 0, 0, 0, 0, false
 	}
@@ -820,6 +1045,9 @@ func (v *Vehicle) GetParamsEx() (int, int, int, int, int, int, int, bool) {
 }
 
 func (v *Vehicle) SetParamsForPlayer(player *Player, objective, doors int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil || player == nil || player.ptr == nil {
 		return false
 	}
@@ -833,6 +1061,9 @@ func (v *Vehicle) SetParamsForPlayer(player *Player, objective, doors int) bool 
 }
 
 func (v *Vehicle) SetHealth(health float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -841,6 +1072,9 @@ func (v *Vehicle) SetHealth(health float32) bool {
 }
 
 func (v *Vehicle) GetHealth() float32 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0.0
 	}
@@ -849,6 +1083,9 @@ func (v *Vehicle) GetHealth() float32 {
 }
 
 func (v *Vehicle) SetVirtualWorld(worldID int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return false
 	}
@@ -857,6 +1094,9 @@ func (v *Vehicle) SetVirtualWorld(worldID int) bool {
 }
 
 func (v *Vehicle) GetVirtualWorld() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
@@ -865,6 +1105,9 @@ func (v *Vehicle) GetVirtualWorld() int {
 }
 
 func (v *Vehicle) GetInterior() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if v == nil || v.ptr == nil {
 		return 0
 	}
