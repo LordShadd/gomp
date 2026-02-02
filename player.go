@@ -26,7 +26,7 @@ type Player struct {
 	ptr unsafe.Pointer
 }
 
-func PlayerFromPointer(ptr unsafe.Pointer) *Player {
+func playerFromPointer(ptr unsafe.Pointer) *Player {
 	if ptr == nil {
 		return nil
 	}
@@ -887,7 +887,7 @@ func (p *Player) GetCameraTargetPlayer() *Player {
 		return nil
 	}
 
-	return PlayerFromPointer(C.Player_GetCameraTargetPlayer(p.ptr))
+	return playerFromPointer(C.Player_GetCameraTargetPlayer(p.ptr))
 }
 
 func (p *Player) GetCameraTargetActor() unsafe.Pointer {
@@ -1378,7 +1378,7 @@ func (p *Player) GetTargetPlayer() *Player {
 		return nil
 	}
 
-	return PlayerFromPointer(C.Player_GetTargetPlayer(p.ptr))
+	return playerFromPointer(C.Player_GetTargetPlayer(p.ptr))
 }
 
 func (p *Player) GetTargetActor() unsafe.Pointer {

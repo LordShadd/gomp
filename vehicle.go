@@ -599,7 +599,7 @@ func (v *Vehicle) GetLastDriver() *Player {
 		return nil
 	}
 
-	return PlayerFromPointer(C.Vehicle_GetLastDriver(v.ptr))
+	return playerFromPointer(C.Vehicle_GetLastDriver(v.ptr))
 }
 
 func (v *Vehicle) GetDriver() *Player {
@@ -610,7 +610,7 @@ func (v *Vehicle) GetDriver() *Player {
 		return nil
 	}
 
-	return PlayerFromPointer(C.Vehicle_GetDriver(v.ptr))
+	return playerFromPointer(C.Vehicle_GetDriver(v.ptr))
 }
 
 func (v *Vehicle) GetOccupant(seat int) *Player {
@@ -621,7 +621,7 @@ func (v *Vehicle) GetOccupant(seat int) *Player {
 		return nil
 	}
 
-	return PlayerFromPointer(C.Vehicle_GetOccupant(v.ptr, C.int(seat)))
+	return playerFromPointer(C.Vehicle_GetOccupant(v.ptr, C.int(seat)))
 }
 
 func (v *Vehicle) CountOccupants() int {

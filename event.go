@@ -501,7 +501,7 @@ func entryPoint() {
 //export onPlayerConnect
 func onPlayerConnect(args *C.struct_EventArgs_onPlayerConnect) C.bool {
 	data := EventPlayerConnect{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -512,7 +512,7 @@ func onPlayerConnect(args *C.struct_EventArgs_onPlayerConnect) C.bool {
 //export onPlayerDisconnect
 func onPlayerDisconnect(args *C.struct_EventArgs_onPlayerDisconnect) C.bool {
 	data := EventPlayerDisconnect{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Reason: int(*args.list.reason),
 	}
 
@@ -524,7 +524,7 @@ func onPlayerDisconnect(args *C.struct_EventArgs_onPlayerDisconnect) C.bool {
 //export onPlayerCommandText
 func onPlayerCommandText(args *C.struct_EventArgs_onPlayerCommandText) C.bool {
 	data := EventPlayerCommandText{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		Command: C.GoStringN(args.list.command.data, C.int(args.list.command.len)),
 	}
 
@@ -536,7 +536,7 @@ func onPlayerCommandText(args *C.struct_EventArgs_onPlayerCommandText) C.bool {
 //export onPlayerRequestClass
 func onPlayerRequestClass(args *C.struct_EventArgs_onPlayerRequestClass) C.bool {
 	data := EventPlayerRequestClass{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		ClassID: int(*args.list.classId),
 	}
 
@@ -548,7 +548,7 @@ func onPlayerRequestClass(args *C.struct_EventArgs_onPlayerRequestClass) C.bool 
 //export onPlayerRequestSpawn
 func onPlayerRequestSpawn(args *C.struct_EventArgs_onPlayerRequestSpawn) C.bool {
 	data := EventPlayerRequestSpawn{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -559,7 +559,7 @@ func onPlayerRequestSpawn(args *C.struct_EventArgs_onPlayerRequestSpawn) C.bool 
 //export onPlayerSpawn
 func onPlayerSpawn(args *C.struct_EventArgs_onPlayerSpawn) C.bool {
 	data := EventPlayerSpawn{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -570,8 +570,8 @@ func onPlayerSpawn(args *C.struct_EventArgs_onPlayerSpawn) C.bool {
 //export onPlayerDeath
 func onPlayerDeath(args *C.struct_EventArgs_onPlayerDeath) C.bool {
 	data := EventPlayerDeath{
-		Player: PlayerFromPointer(*args.list.player),
-		Killer: PlayerFromPointer(*args.list.killer),
+		Player: playerFromPointer(*args.list.player),
+		Killer: playerFromPointer(*args.list.killer),
 		Reason: int(*args.list.reason),
 	}
 
@@ -583,7 +583,7 @@ func onPlayerDeath(args *C.struct_EventArgs_onPlayerDeath) C.bool {
 //export onPlayerUpdate
 func onPlayerUpdate(args *C.struct_EventArgs_onPlayerUpdate) C.bool {
 	data := EventPlayerUpdate{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -594,7 +594,7 @@ func onPlayerUpdate(args *C.struct_EventArgs_onPlayerUpdate) C.bool {
 //export onPlayerText
 func onPlayerText(args *C.struct_EventArgs_onPlayerText) C.bool {
 	data := EventPlayerText{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Text:   C.GoStringN(args.list.text.data, C.int(args.list.text.len)),
 	}
 
@@ -606,7 +606,7 @@ func onPlayerText(args *C.struct_EventArgs_onPlayerText) C.bool {
 //export onPlayerInteriorChange
 func onPlayerInteriorChange(args *C.struct_EventArgs_onPlayerInteriorChange) C.bool {
 	data := EventPlayerInteriorChange{
-		Player:      PlayerFromPointer(*args.list.player),
+		Player:      playerFromPointer(*args.list.player),
 		NewInterior: int(*args.list.newInterior),
 		OldInterior: int(*args.list.oldInterior),
 	}
@@ -619,7 +619,7 @@ func onPlayerInteriorChange(args *C.struct_EventArgs_onPlayerInteriorChange) C.b
 //export onPlayerStateChange
 func onPlayerStateChange(args *C.struct_EventArgs_onPlayerStateChange) C.bool {
 	data := EventPlayerStateChange{
-		Player:   PlayerFromPointer(*args.list.player),
+		Player:   playerFromPointer(*args.list.player),
 		NewState: int(*args.list.newState),
 		OldState: int(*args.list.oldState),
 	}
@@ -632,7 +632,7 @@ func onPlayerStateChange(args *C.struct_EventArgs_onPlayerStateChange) C.bool {
 //export onPlayerKeyStateChange
 func onPlayerKeyStateChange(args *C.struct_EventArgs_onPlayerKeyStateChange) C.bool {
 	data := EventPlayerKeyStateChange{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		NewKeys: int(*args.list.newKeys),
 		OldKeys: int(*args.list.oldKeys),
 	}
@@ -645,7 +645,7 @@ func onPlayerKeyStateChange(args *C.struct_EventArgs_onPlayerKeyStateChange) C.b
 //export onPlayerEnterVehicle
 func onPlayerEnterVehicle(args *C.struct_EventArgs_onPlayerEnterVehicle) C.bool {
 	data := EventPlayerEnterVehicle{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		Vehicle:   &Vehicle{ptr: *args.list.vehicle},
 		Passenger: bool(*args.list.passenger),
 	}
@@ -658,7 +658,7 @@ func onPlayerEnterVehicle(args *C.struct_EventArgs_onPlayerEnterVehicle) C.bool 
 //export onPlayerExitVehicle
 func onPlayerExitVehicle(args *C.struct_EventArgs_onPlayerExitVehicle) C.bool {
 	data := EventPlayerExitVehicle{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
 	}
 
@@ -670,7 +670,7 @@ func onPlayerExitVehicle(args *C.struct_EventArgs_onPlayerExitVehicle) C.bool {
 //export onPlayerEnterCheckpoint
 func onPlayerEnterCheckpoint(args *C.struct_EventArgs_onPlayerEnterCheckpoint) C.bool {
 	data := EventPlayerEnterCheckpoint{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -681,7 +681,7 @@ func onPlayerEnterCheckpoint(args *C.struct_EventArgs_onPlayerEnterCheckpoint) C
 //export onPlayerLeaveCheckpoint
 func onPlayerLeaveCheckpoint(args *C.struct_EventArgs_onPlayerLeaveCheckpoint) C.bool {
 	data := EventPlayerLeaveCheckpoint{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -692,7 +692,7 @@ func onPlayerLeaveCheckpoint(args *C.struct_EventArgs_onPlayerLeaveCheckpoint) C
 //export onPlayerEnterRaceCheckpoint
 func onPlayerEnterRaceCheckpoint(args *C.struct_EventArgs_onPlayerEnterRaceCheckpoint) C.bool {
 	data := EventPlayerEnterRaceCheckpoint{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -703,7 +703,7 @@ func onPlayerEnterRaceCheckpoint(args *C.struct_EventArgs_onPlayerEnterRaceCheck
 //export onPlayerLeaveRaceCheckpoint
 func onPlayerLeaveRaceCheckpoint(args *C.struct_EventArgs_onPlayerLeaveRaceCheckpoint) C.bool {
 	data := EventPlayerLeaveRaceCheckpoint{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -714,8 +714,8 @@ func onPlayerLeaveRaceCheckpoint(args *C.struct_EventArgs_onPlayerLeaveRaceCheck
 //export onPlayerGiveDamage
 func onPlayerGiveDamage(args *C.struct_EventArgs_onPlayerGiveDamage) C.bool {
 	data := EventPlayerGiveDamage{
-		Player:   PlayerFromPointer(*args.list.player),
-		To:       PlayerFromPointer(*args.list.to),
+		Player:   playerFromPointer(*args.list.player),
+		To:       playerFromPointer(*args.list.to),
 		Amount:   float32(*args.list.amount),
 		Weapon:   int(*args.list.weapon),
 		BodyPart: int(*args.list.bodypart),
@@ -729,8 +729,8 @@ func onPlayerGiveDamage(args *C.struct_EventArgs_onPlayerGiveDamage) C.bool {
 //export onPlayerTakeDamage
 func onPlayerTakeDamage(args *C.struct_EventArgs_onPlayerTakeDamage) C.bool {
 	data := EventPlayerTakeDamage{
-		Player:   PlayerFromPointer(*args.list.player),
-		From:     PlayerFromPointer(*args.list.from),
+		Player:   playerFromPointer(*args.list.player),
+		From:     playerFromPointer(*args.list.from),
 		Amount:   float32(*args.list.amount),
 		Weapon:   int(*args.list.weapon),
 		BodyPart: int(*args.list.bodypart),
@@ -744,7 +744,7 @@ func onPlayerTakeDamage(args *C.struct_EventArgs_onPlayerTakeDamage) C.bool {
 //export onPlayerGiveDamageActor
 func onPlayerGiveDamageActor(args *C.struct_EventArgs_onPlayerGiveDamageActor) C.bool {
 	data := EventPlayerGiveDamageActor{
-		Player:   PlayerFromPointer(*args.list.player),
+		Player:   playerFromPointer(*args.list.player),
 		Actor:    *args.list.actor,
 		Amount:   float32(*args.list.amount),
 		Weapon:   int(*args.list.weapon),
@@ -759,7 +759,7 @@ func onPlayerGiveDamageActor(args *C.struct_EventArgs_onPlayerGiveDamageActor) C
 //export onPlayerShotMissed
 func onPlayerShotMissed(args *C.struct_EventArgs_onPlayerShotMissed) C.bool {
 	data := EventPlayerShotMissed{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Weapon: int(*args.list.weapon),
 		X:      float32(*args.list.x),
 		Y:      float32(*args.list.y),
@@ -774,8 +774,8 @@ func onPlayerShotMissed(args *C.struct_EventArgs_onPlayerShotMissed) C.bool {
 //export onPlayerShotPlayer
 func onPlayerShotPlayer(args *C.struct_EventArgs_onPlayerShotPlayer) C.bool {
 	data := EventPlayerShotPlayer{
-		Player: PlayerFromPointer(*args.list.player),
-		Target: PlayerFromPointer(*args.list.target),
+		Player: playerFromPointer(*args.list.player),
+		Target: playerFromPointer(*args.list.target),
 		Weapon: int(*args.list.weapon),
 		X:      float32(*args.list.x),
 		Y:      float32(*args.list.y),
@@ -790,7 +790,7 @@ func onPlayerShotPlayer(args *C.struct_EventArgs_onPlayerShotPlayer) C.bool {
 //export onPlayerShotVehicle
 func onPlayerShotVehicle(args *C.struct_EventArgs_onPlayerShotVehicle) C.bool {
 	data := EventPlayerShotVehicle{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Target: &Vehicle{ptr: *args.list.target},
 		Weapon: int(*args.list.weapon),
 		X:      float32(*args.list.x),
@@ -806,7 +806,7 @@ func onPlayerShotVehicle(args *C.struct_EventArgs_onPlayerShotVehicle) C.bool {
 //export onPlayerShotObject
 func onPlayerShotObject(args *C.struct_EventArgs_onPlayerShotObject) C.bool {
 	data := EventPlayerShotObject{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Target: *args.list.target,
 		Weapon: int(*args.list.weapon),
 		X:      float32(*args.list.x),
@@ -822,7 +822,7 @@ func onPlayerShotObject(args *C.struct_EventArgs_onPlayerShotObject) C.bool {
 //export onPlayerShotPlayerObject
 func onPlayerShotPlayerObject(args *C.struct_EventArgs_onPlayerShotPlayerObject) C.bool {
 	data := EventPlayerShotPlayerObject{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Target: *args.list.target,
 		Weapon: int(*args.list.weapon),
 		X:      float32(*args.list.x),
@@ -838,7 +838,7 @@ func onPlayerShotPlayerObject(args *C.struct_EventArgs_onPlayerShotPlayerObject)
 //export onPlayerPickUpPickup
 func onPlayerPickUpPickup(args *C.struct_EventArgs_onPlayerPickUpPickup) C.bool {
 	data := EventPlayerPickUpPickup{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Pickup: *args.list.pickup,
 	}
 
@@ -850,7 +850,7 @@ func onPlayerPickUpPickup(args *C.struct_EventArgs_onPlayerPickUpPickup) C.bool 
 //export onPlayerObjectMove
 func onPlayerObjectMove(args *C.struct_EventArgs_onPlayerObjectMove) C.bool {
 	data := EventPlayerObjectMove{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Object: *args.list.object,
 	}
 
@@ -862,7 +862,7 @@ func onPlayerObjectMove(args *C.struct_EventArgs_onPlayerObjectMove) C.bool {
 //export onPlayerEditObject
 func onPlayerEditObject(args *C.struct_EventArgs_onPlayerEditObject) C.bool {
 	data := EventPlayerEditObject{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		Object:    *args.list.object,
 		Response:  int(*args.list.response),
 		OffsetX:   float32(*args.list.offsetX),
@@ -881,7 +881,7 @@ func onPlayerEditObject(args *C.struct_EventArgs_onPlayerEditObject) C.bool {
 //export onPlayerEditAttachedObject
 func onPlayerEditAttachedObject(args *C.struct_EventArgs_onPlayerEditAttachedObject) C.bool {
 	data := EventPlayerEditAttachedObject{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		Saved:     bool(*args.list.saved),
 		Index:     int(*args.list.index),
 		Model:     int(*args.list.model),
@@ -905,7 +905,7 @@ func onPlayerEditAttachedObject(args *C.struct_EventArgs_onPlayerEditAttachedObj
 //export onPlayerSelectObject
 func onPlayerSelectObject(args *C.struct_EventArgs_onPlayerSelectObject) C.bool {
 	data := EventPlayerSelectObject{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Object: *args.list.object,
 		Model:  int(*args.list.model),
 		X:      float32(*args.list.x),
@@ -921,7 +921,7 @@ func onPlayerSelectObject(args *C.struct_EventArgs_onPlayerSelectObject) C.bool 
 //export onPlayerClickMap
 func onPlayerClickMap(args *C.struct_EventArgs_onPlayerClickMap) C.bool {
 	data := EventPlayerClickMap{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		X:      float32(*args.list.x),
 		Y:      float32(*args.list.y),
 		Z:      float32(*args.list.z),
@@ -935,7 +935,7 @@ func onPlayerClickMap(args *C.struct_EventArgs_onPlayerClickMap) C.bool {
 //export onPlayerClickTextDraw
 func onPlayerClickTextDraw(args *C.struct_EventArgs_onPlayerClickTextDraw) C.bool {
 	data := EventPlayerClickTextDraw{
-		Player:   PlayerFromPointer(*args.list.player),
+		Player:   playerFromPointer(*args.list.player),
 		TextDraw: *args.list.textdraw,
 	}
 
@@ -947,7 +947,7 @@ func onPlayerClickTextDraw(args *C.struct_EventArgs_onPlayerClickTextDraw) C.boo
 //export onPlayerClickPlayerTextDraw
 func onPlayerClickPlayerTextDraw(args *C.struct_EventArgs_onPlayerClickPlayerTextDraw) C.bool {
 	data := EventPlayerClickPlayerTextDraw{
-		Player:         PlayerFromPointer(*args.list.player),
+		Player:         playerFromPointer(*args.list.player),
 		PlayerTextDraw: *args.list.textdraw,
 	}
 
@@ -959,8 +959,8 @@ func onPlayerClickPlayerTextDraw(args *C.struct_EventArgs_onPlayerClickPlayerTex
 //export onPlayerClickPlayer
 func onPlayerClickPlayer(args *C.struct_EventArgs_onPlayerClickPlayer) C.bool {
 	data := EventPlayerClickPlayer{
-		Player:  PlayerFromPointer(*args.list.player),
-		Clicked: PlayerFromPointer(*args.list.clicked),
+		Player:  playerFromPointer(*args.list.player),
+		Clicked: playerFromPointer(*args.list.clicked),
 		Source:  int(*args.list.source),
 	}
 
@@ -972,8 +972,8 @@ func onPlayerClickPlayer(args *C.struct_EventArgs_onPlayerClickPlayer) C.bool {
 //export onPlayerStreamIn
 func onPlayerStreamIn(args *C.struct_EventArgs_onPlayerStreamIn) C.bool {
 	data := EventPlayerStreamIn{
-		Player:    PlayerFromPointer(*args.list.player),
-		ForPlayer: PlayerFromPointer(*args.list.forPlayer),
+		Player:    playerFromPointer(*args.list.player),
+		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
 	emmitEvent(data)
@@ -984,8 +984,8 @@ func onPlayerStreamIn(args *C.struct_EventArgs_onPlayerStreamIn) C.bool {
 //export onPlayerStreamOut
 func onPlayerStreamOut(args *C.struct_EventArgs_onPlayerStreamOut) C.bool {
 	data := EventPlayerStreamOut{
-		Player:    PlayerFromPointer(*args.list.player),
-		ForPlayer: PlayerFromPointer(*args.list.forPlayer),
+		Player:    playerFromPointer(*args.list.player),
+		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
 	emmitEvent(data)
@@ -996,7 +996,7 @@ func onPlayerStreamOut(args *C.struct_EventArgs_onPlayerStreamOut) C.bool {
 //export onPlayerExitedMenu
 func onPlayerExitedMenu(args *C.struct_EventArgs_onPlayerExitedMenu) C.bool {
 	data := EventPlayerExitedMenu{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -1007,7 +1007,7 @@ func onPlayerExitedMenu(args *C.struct_EventArgs_onPlayerExitedMenu) C.bool {
 //export onPlayerSelectedMenuRow
 func onPlayerSelectedMenuRow(args *C.struct_EventArgs_onPlayerSelectedMenuRow) C.bool {
 	data := EventPlayerSelectedMenuRow{
-		Player: PlayerFromPointer(*args.list.player),
+		Player: playerFromPointer(*args.list.player),
 		Row:    int(*args.list.row),
 	}
 
@@ -1019,7 +1019,7 @@ func onPlayerSelectedMenuRow(args *C.struct_EventArgs_onPlayerSelectedMenuRow) C
 //export onPlayerRequestDownload
 func onPlayerRequestDownload(args *C.struct_EventArgs_onPlayerRequestDownload) C.bool {
 	data := EventPlayerRequestDownload{
-		Player:   PlayerFromPointer(*args.list.player),
+		Player:   playerFromPointer(*args.list.player),
 		Type:     int(*args.list._type),
 		Checksum: int(*args.list.checksum),
 	}
@@ -1039,7 +1039,7 @@ func onTick() {
 //export onIncomingConnection
 func onIncomingConnection(args *C.struct_EventArgs_onIncomingConnection) C.bool {
 	data := EventIncomingConnection{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		IPAddress: C.GoStringN(args.list.ipAddress.data, C.int(args.list.ipAddress.len)),
 		Port:      int(*args.list.port),
 	}
@@ -1077,7 +1077,7 @@ func onConsoleText(args *C.struct_EventArgs_onConsoleText) C.bool {
 //export onDialogResponse
 func onDialogResponse(args *C.struct_EventArgs_onDialogResponse) C.bool {
 	data := EventDialogResponse{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		DialogID:  int(*args.list.dialogId),
 		Response:  int(*args.list.response),
 		ListItem:  int(*args.list.listItem),
@@ -1104,7 +1104,7 @@ func onVehicleSpawn(args *C.struct_EventArgs_onVehicleSpawn) C.bool {
 func onVehicleDeath(args *C.struct_EventArgs_onVehicleDeath) C.bool {
 	data := EventVehicleDeath{
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -1115,7 +1115,7 @@ func onVehicleDeath(args *C.struct_EventArgs_onVehicleDeath) C.bool {
 //export onVehicleMod
 func onVehicleMod(args *C.struct_EventArgs_onVehicleMod) C.bool {
 	data := EventVehicleMod{
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		Vehicle:   &Vehicle{ptr: *args.list.vehicle},
 		Component: int(*args.list.component),
 	}
@@ -1128,7 +1128,7 @@ func onVehicleMod(args *C.struct_EventArgs_onVehicleMod) C.bool {
 //export onVehiclePaintJob
 func onVehiclePaintJob(args *C.struct_EventArgs_onVehiclePaintJob) C.bool {
 	data := EventVehiclePaintJob{
-		Player:   PlayerFromPointer(*args.list.player),
+		Player:   playerFromPointer(*args.list.player),
 		Vehicle:  &Vehicle{ptr: *args.list.vehicle},
 		PaintJob: int(*args.list.paintJob),
 	}
@@ -1141,7 +1141,7 @@ func onVehiclePaintJob(args *C.struct_EventArgs_onVehiclePaintJob) C.bool {
 //export onVehicleRespray
 func onVehicleRespray(args *C.struct_EventArgs_onVehicleRespray) C.bool {
 	data := EventVehicleRespray{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
 		Color1:  int(*args.list.color1),
 		Color2:  int(*args.list.color2),
@@ -1156,7 +1156,7 @@ func onVehicleRespray(args *C.struct_EventArgs_onVehicleRespray) C.bool {
 func onVehicleDamageStatusUpdate(args *C.struct_EventArgs_onVehicleDamageStatusUpdate) C.bool {
 	data := EventVehicleDamageStatusUpdate{
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -1167,7 +1167,7 @@ func onVehicleDamageStatusUpdate(args *C.struct_EventArgs_onVehicleDamageStatusU
 //export onVehicleSirenStateChange
 func onVehicleSirenStateChange(args *C.struct_EventArgs_onVehicleSirenStateChange) C.bool {
 	data := EventVehicleSirenStateChange{
-		Player:     PlayerFromPointer(*args.list.player),
+		Player:     playerFromPointer(*args.list.player),
 		Vehicle:    &Vehicle{ptr: *args.list.vehicle},
 		SirenState: int(*args.list.sirenState),
 	}
@@ -1181,7 +1181,7 @@ func onVehicleSirenStateChange(args *C.struct_EventArgs_onVehicleSirenStateChang
 func onVehicleStreamIn(args *C.struct_EventArgs_onVehicleStreamIn) C.bool {
 	data := EventVehicleStreamIn{
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -1193,7 +1193,7 @@ func onVehicleStreamIn(args *C.struct_EventArgs_onVehicleStreamIn) C.bool {
 func onVehicleStreamOut(args *C.struct_EventArgs_onVehicleStreamOut) C.bool {
 	data := EventVehicleStreamOut{
 		Vehicle: &Vehicle{ptr: *args.list.vehicle},
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 	}
 
 	emmitEvent(data)
@@ -1205,7 +1205,7 @@ func onVehicleStreamOut(args *C.struct_EventArgs_onVehicleStreamOut) C.bool {
 func onUnoccupiedVehicleUpdate(args *C.struct_EventArgs_onUnoccupiedVehicleUpdate) C.bool {
 	data := EventUnoccupiedVehicleUpdate{
 		Vehicle:   &Vehicle{ptr: *args.list.vehicle},
-		Player:    PlayerFromPointer(*args.list.player),
+		Player:    playerFromPointer(*args.list.player),
 		Seat:      int(*args.list.seat),
 		PosX:      float32(*args.list.posX),
 		PosY:      float32(*args.list.posY),
@@ -1223,7 +1223,7 @@ func onUnoccupiedVehicleUpdate(args *C.struct_EventArgs_onUnoccupiedVehicleUpdat
 //export onTrailerUpdate
 func onTrailerUpdate(args *C.struct_EventArgs_onTrailerUpdate) C.bool {
 	data := EventTrailerUpdate{
-		Player:  PlayerFromPointer(*args.list.player),
+		Player:  playerFromPointer(*args.list.player),
 		Trailer: &Vehicle{ptr: *args.list.trailer},
 	}
 
@@ -1236,7 +1236,7 @@ func onTrailerUpdate(args *C.struct_EventArgs_onTrailerUpdate) C.bool {
 func onActorStreamIn(args *C.struct_EventArgs_onActorStreamIn) C.bool {
 	data := EventActorStreamIn{
 		Actor:     *args.list.actor,
-		ForPlayer: PlayerFromPointer(*args.list.forPlayer),
+		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
 	emmitEvent(data)
@@ -1248,7 +1248,7 @@ func onActorStreamIn(args *C.struct_EventArgs_onActorStreamIn) C.bool {
 func onActorStreamOut(args *C.struct_EventArgs_onActorStreamOut) C.bool {
 	data := EventActorStreamOut{
 		Actor:     *args.list.actor,
-		ForPlayer: PlayerFromPointer(*args.list.forPlayer),
+		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
 	emmitEvent(data)
@@ -1270,7 +1270,7 @@ func onObjectMove(args *C.struct_EventArgs_onObjectMove) C.bool {
 //export onEnterExitModShop
 func onEnterExitModShop(args *C.struct_EventArgs_onEnterExitModShop) C.bool {
 	data := EventEnterExitModShop{
-		Player:     PlayerFromPointer(*args.list.player),
+		Player:     playerFromPointer(*args.list.player),
 		EnterExit:  int(*args.list.enterexit),
 		InteriorID: int(*args.list.interiorId),
 	}
