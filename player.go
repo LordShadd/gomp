@@ -1207,6 +1207,20 @@ func (p *Player) GetVehicleID() int {
 	return int(C.Player_GetVehicleID(p.ptr))
 }
 
+func (p *Player) GetVehicle() *Vehicle {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return nil
+	}
+
+	vehicleID := int(C.Player_GetVehicleID(p.ptr))
+	vehiclePtr := C.Vehicle_FromID(C.int(vehicleID))
+
+	return vehicleFromPointer(vehiclePtr)
+}
+
 func (p *Player) GetVehicleSeat() int {
 	apiMutex.Lock()
 	defer apiMutex.Unlock()
