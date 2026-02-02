@@ -22,6 +22,14 @@ type Vehicle struct {
 	ptr unsafe.Pointer
 }
 
+func vehicleFromPointer(ptr unsafe.Pointer) *Vehicle {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Vehicle{ptr}
+}
+
 func VehicleFromID(vehicleID int) *Vehicle {
 	ptr := C.Vehicle_FromID(C.int(vehicleID))
 
@@ -30,14 +38,6 @@ func VehicleFromID(vehicleID int) *Vehicle {
 	}
 
 	return &Vehicle{ptr}
-}
-
-func (v *Vehicle) Pointer() unsafe.Pointer {
-	if v == nil {
-		return nil
-	}
-
-	return v.ptr
 }
 
 func VehicleCreate(modelID int, x, y, z, rotation float32, color1, color2, respawnDelay int, addSiren bool) *Vehicle {
