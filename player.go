@@ -10,11 +10,13 @@ package gomp
 
 #include "main.h"
 #include "player.h"
+#include "vehicle.h"
 
 #endif
 */
 import "C"
 import (
+	"fmt"
 	"unsafe"
 )
 
@@ -22,16 +24,6 @@ const InvalidPlayerID = 0xFFFF
 
 type Player struct {
 	ptr unsafe.Pointer
-}
-
-func PlayerFromID(playerID int) *Player {
-	ptr := C.Player_FromID(C.int(playerID))
-
-	if ptr == nil {
-		return nil
-	}
-
-	return &Player{ptr}
 }
 
 func PlayerFromPointer(ptr unsafe.Pointer) *Player {
@@ -42,7 +34,23 @@ func PlayerFromPointer(ptr unsafe.Pointer) *Player {
 	return &Player{ptr}
 }
 
+func PlayerFromID(playerID int) *Player {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	ptr := C.Player_FromID(C.int(playerID))
+
+	if ptr == nil {
+		return nil
+	}
+
+	return &Player{ptr}
+}
+
 func PlayerGetAnimationName(index int) (string, string, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var lib, name C.struct_CAPIStringView
 
 	ret := C.Player_GetAnimationName(
@@ -61,7 +69,24 @@ func PlayerGetAnimationName(index int) (string, string, bool) {
 	return sLib, sName, true
 }
 
+func (p *Player) isValid() bool {
+	if p == nil || p.ptr == nil {
+		return false
+	}
+
+	playerID := int(C.Player_GetID(p.ptr))
+
+	if playerID == InvalidPlayerID || playerID == -1 {
+		return false
+	}
+
+	return true
+}
+
 func (p *Player) GetID() int {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	if p == nil || p.ptr == nil {
 		return InvalidPlayerID
 	}
@@ -70,7 +95,10 @@ func (p *Player) GetID() int {
 }
 
 func (p *Player) GetName() (string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", false
 	}
 
@@ -85,7 +113,10 @@ func (p *Player) GetName() (string, bool) {
 }
 
 func (p *Player) GetCustomSkin() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return -1
 	}
 
@@ -93,7 +124,10 @@ func (p *Player) GetCustomSkin() int {
 }
 
 func (p *Player) GetDialog() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return -1
 	}
 
@@ -101,7 +135,10 @@ func (p *Player) GetDialog() int {
 }
 
 func (p *Player) SendClientMessage(color uint32, text string) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -112,7 +149,10 @@ func (p *Player) SendClientMessage(color uint32, text string) bool {
 }
 
 func (p *Player) SetCameraPos(x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -120,7 +160,10 @@ func (p *Player) SetCameraPos(x, y, z float32) bool {
 }
 
 func (p *Player) SetDrunkLevel(level int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -128,7 +171,10 @@ func (p *Player) SetDrunkLevel(level int) bool {
 }
 
 func (p *Player) SetInterior(interior int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -136,7 +182,10 @@ func (p *Player) SetInterior(interior int) bool {
 }
 
 func (p *Player) SetWantedLevel(level int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -144,7 +193,10 @@ func (p *Player) SetWantedLevel(level int) bool {
 }
 
 func (p *Player) SetWeather(weather int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -152,7 +204,10 @@ func (p *Player) SetWeather(weather int) bool {
 }
 
 func (p *Player) GetWeather() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -160,7 +215,10 @@ func (p *Player) GetWeather() int {
 }
 
 func (p *Player) SetSkin(skin int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -168,7 +226,10 @@ func (p *Player) SetSkin(skin int) bool {
 }
 
 func (p *Player) SetShopName(name string) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -179,7 +240,10 @@ func (p *Player) SetShopName(name string) bool {
 }
 
 func (p *Player) GiveMoney(amount int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -187,7 +251,10 @@ func (p *Player) GiveMoney(amount int) bool {
 }
 
 func (p *Player) SetCameraLookAt(x, y, z float32, cutType int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -195,7 +262,10 @@ func (p *Player) SetCameraLookAt(x, y, z float32, cutType int) bool {
 }
 
 func (p *Player) SetCameraBehind() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -203,7 +273,10 @@ func (p *Player) SetCameraBehind() bool {
 }
 
 func (p *Player) CreateExplosion(x, y, z float32, typeID int, radius float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -211,7 +284,10 @@ func (p *Player) CreateExplosion(x, y, z float32, typeID int, radius float32) bo
 }
 
 func (p *Player) PlayAudioStream(url string, x, y, z, distance float32, usePos bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -222,7 +298,10 @@ func (p *Player) PlayAudioStream(url string, x, y, z, distance float32, usePos b
 }
 
 func (p *Player) StopAudioStream() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -230,7 +309,10 @@ func (p *Player) StopAudioStream() bool {
 }
 
 func (p *Player) ToggleWidescreen(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -238,7 +320,10 @@ func (p *Player) ToggleWidescreen(enable bool) bool {
 }
 
 func (p *Player) IsWidescreenToggled() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -246,7 +331,10 @@ func (p *Player) IsWidescreenToggled() bool {
 }
 
 func (p *Player) SetHealth(health float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -254,7 +342,10 @@ func (p *Player) SetHealth(health float32) bool {
 }
 
 func (p *Player) GetHealth() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -262,7 +353,10 @@ func (p *Player) GetHealth() float32 {
 }
 
 func (p *Player) SetArmor(armor float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -270,7 +364,10 @@ func (p *Player) SetArmor(armor float32) bool {
 }
 
 func (p *Player) GetArmor() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -278,7 +375,10 @@ func (p *Player) GetArmor() float32 {
 }
 
 func (p *Player) SetTeam(team int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -286,7 +386,10 @@ func (p *Player) SetTeam(team int) bool {
 }
 
 func (p *Player) GetTeam() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -294,7 +397,10 @@ func (p *Player) GetTeam() int {
 }
 
 func (p *Player) SetScore(score int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -302,7 +408,10 @@ func (p *Player) SetScore(score int) bool {
 }
 
 func (p *Player) GetScore() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -310,7 +419,10 @@ func (p *Player) GetScore() int {
 }
 
 func (p *Player) GetSkin() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -318,7 +430,10 @@ func (p *Player) GetSkin() int {
 }
 
 func (p *Player) SetColor(color uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -326,7 +441,10 @@ func (p *Player) SetColor(color uint32) bool {
 }
 
 func (p *Player) GetColor() uint32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -334,7 +452,10 @@ func (p *Player) GetColor() uint32 {
 }
 
 func (p *Player) GetDefaultColor() uint32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -342,7 +463,10 @@ func (p *Player) GetDefaultColor() uint32 {
 }
 
 func (p *Player) GetDrunkLevel() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -350,7 +474,10 @@ func (p *Player) GetDrunkLevel() int {
 }
 
 func (p *Player) GiveWeapon(weapon, ammo int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -358,7 +485,10 @@ func (p *Player) GiveWeapon(weapon, ammo int) bool {
 }
 
 func (p *Player) RemoveWeapon(weapon int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -366,7 +496,10 @@ func (p *Player) RemoveWeapon(weapon int) bool {
 }
 
 func (p *Player) GetMoney() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -374,7 +507,10 @@ func (p *Player) GetMoney() int {
 }
 
 func (p *Player) ResetMoney() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -382,7 +518,10 @@ func (p *Player) ResetMoney() bool {
 }
 
 func (p *Player) SetName(name string) int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -393,7 +532,10 @@ func (p *Player) SetName(name string) int {
 }
 
 func (p *Player) GetState() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -401,7 +543,10 @@ func (p *Player) GetState() int {
 }
 
 func (p *Player) GetPing() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -409,7 +554,10 @@ func (p *Player) GetPing() int {
 }
 
 func (p *Player) GetWeapon() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -417,7 +565,10 @@ func (p *Player) GetWeapon() int {
 }
 
 func (p *Player) SetTime(hour, minute int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -425,7 +576,10 @@ func (p *Player) SetTime(hour, minute int) bool {
 }
 
 func (p *Player) GetTime() (int, int, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, false
 	}
 
@@ -436,7 +590,10 @@ func (p *Player) GetTime() (int, int, bool) {
 }
 
 func (p *Player) ToggleClock(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -444,7 +601,10 @@ func (p *Player) ToggleClock(enable bool) bool {
 }
 
 func (p *Player) HasClock() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -452,7 +612,10 @@ func (p *Player) HasClock() bool {
 }
 
 func (p *Player) ForceClassSelection() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -460,7 +623,10 @@ func (p *Player) ForceClassSelection() bool {
 }
 
 func (p *Player) GetWantedLevel() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -468,7 +634,10 @@ func (p *Player) GetWantedLevel() int {
 }
 
 func (p *Player) SetFightingStyle(style int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -476,7 +645,10 @@ func (p *Player) SetFightingStyle(style int) bool {
 }
 
 func (p *Player) GetFightingStyle() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -484,7 +656,10 @@ func (p *Player) GetFightingStyle() int {
 }
 
 func (p *Player) SetVelocity(x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -492,7 +667,10 @@ func (p *Player) SetVelocity(x, y, z float32) bool {
 }
 
 func (p *Player) GetVelocity() (float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -503,7 +681,10 @@ func (p *Player) GetVelocity() (float32, float32, float32, bool) {
 }
 
 func (p *Player) GetCameraPos() (float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -514,7 +695,10 @@ func (p *Player) GetCameraPos() (float32, float32, float32, bool) {
 }
 
 func (p *Player) GetDistanceFromPoint(x, y, z float32) float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -522,7 +706,10 @@ func (p *Player) GetDistanceFromPoint(x, y, z float32) float32 {
 }
 
 func (p *Player) GetInterior() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -530,7 +717,10 @@ func (p *Player) GetInterior() int {
 }
 
 func (p *Player) SetPos(x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -538,7 +728,10 @@ func (p *Player) SetPos(x, y, z float32) bool {
 }
 
 func (p *Player) GetPos() (float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -549,7 +742,10 @@ func (p *Player) GetPos() (float32, float32, float32, bool) {
 }
 
 func (p *Player) GetVirtualWorld() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -557,7 +753,10 @@ func (p *Player) GetVirtualWorld() int {
 }
 
 func (p *Player) IsNPC() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -565,7 +764,10 @@ func (p *Player) IsNPC() bool {
 }
 
 func (p *Player) IsStreamedIn(other *Player) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || other == nil || other.ptr == nil || other.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || other == nil || other.ptr == nil || other.GetID() == -1 {
 		return false
 	}
 
@@ -573,7 +775,10 @@ func (p *Player) IsStreamedIn(other *Player) bool {
 }
 
 func (p *Player) PlayGameSound(sound int, x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -581,7 +786,10 @@ func (p *Player) PlayGameSound(sound int, x, y, z float32) bool {
 }
 
 func (p *Player) SpectatePlayer(target *Player, mode int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || target == nil || target.ptr == nil || target.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || target == nil || target.ptr == nil || target.GetID() == -1 {
 		return false
 	}
 
@@ -589,7 +797,10 @@ func (p *Player) SpectatePlayer(target *Player, mode int) bool {
 }
 
 func (p *Player) SpectateVehicle(targetVehicle unsafe.Pointer, mode int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -597,7 +808,10 @@ func (p *Player) SpectateVehicle(targetVehicle unsafe.Pointer, mode int) bool {
 }
 
 func (p *Player) SetVirtualWorld(vw int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -605,7 +819,10 @@ func (p *Player) SetVirtualWorld(vw int) bool {
 }
 
 func (p *Player) SetWorldBounds(xMax, xMin, yMax, yMin float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -613,7 +830,10 @@ func (p *Player) SetWorldBounds(xMax, xMin, yMax, yMin float32) bool {
 }
 
 func (p *Player) ClearWorldBounds() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -621,7 +841,10 @@ func (p *Player) ClearWorldBounds() bool {
 }
 
 func (p *Player) GetWorldBounds() (float32, float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, 0, false
 	}
 
@@ -632,7 +855,10 @@ func (p *Player) GetWorldBounds() (float32, float32, float32, float32, bool) {
 }
 
 func (p *Player) ClearAnimations(syncType int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -640,7 +866,10 @@ func (p *Player) ClearAnimations(syncType int) bool {
 }
 
 func (p *Player) GetLastShotVectors() (float32, float32, float32, float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, 0, 0, 0, false
 	}
 
@@ -651,7 +880,10 @@ func (p *Player) GetLastShotVectors() (float32, float32, float32, float32, float
 }
 
 func (p *Player) GetCameraTargetPlayer() *Player {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -659,7 +891,10 @@ func (p *Player) GetCameraTargetPlayer() *Player {
 }
 
 func (p *Player) GetCameraTargetActor() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -667,7 +902,10 @@ func (p *Player) GetCameraTargetActor() unsafe.Pointer {
 }
 
 func (p *Player) GetCameraTargetObject() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -675,23 +913,32 @@ func (p *Player) GetCameraTargetObject() unsafe.Pointer {
 }
 
 func (p *Player) GetCameraTargetVehicle() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
 	return C.Player_GetCameraTargetVehicle(p.ptr)
 }
 
-func (p *Player) PutInVehicle(vehicle unsafe.Pointer, seat int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+func (p *Player) PutInVehicle(vehicle *Vehicle, seat int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
-	return bool(C.Player_PutInVehicle(p.ptr, vehicle, C.int(seat)))
+	return bool(C.Player_PutInVehicle(p.ptr, vehicle.ptr, C.int(seat)))
 }
 
 func (p *Player) RemoveBuilding(model int, x, y, z, radius float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -699,7 +946,10 @@ func (p *Player) RemoveBuilding(model int, x, y, z, radius float32) bool {
 }
 
 func (p *Player) GetBuildingsRemoved() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -707,7 +957,10 @@ func (p *Player) GetBuildingsRemoved() int {
 }
 
 func (p *Player) RemoveFromVehicle(force bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -715,7 +968,10 @@ func (p *Player) RemoveFromVehicle(force bool) bool {
 }
 
 func (p *Player) RemoveMapIcon(icon int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -723,7 +979,10 @@ func (p *Player) RemoveMapIcon(icon int) bool {
 }
 
 func (p *Player) SetMapIcon(iconID int, x, y, z float32, iconType int, color uint32, style int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -731,7 +990,10 @@ func (p *Player) SetMapIcon(iconID int, x, y, z float32, iconType int, color uin
 }
 
 func (p *Player) ResetWeapons() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -739,7 +1001,10 @@ func (p *Player) ResetWeapons() bool {
 }
 
 func (p *Player) SetAmmo(id uint8, ammo uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -747,7 +1012,10 @@ func (p *Player) SetAmmo(id uint8, ammo uint32) bool {
 }
 
 func (p *Player) SetArmedWeapon(weapon uint8) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -755,7 +1023,10 @@ func (p *Player) SetArmedWeapon(weapon uint8) bool {
 }
 
 func (p *Player) SetChatBubble(text string, color uint32, drawDistance float32, expireTime int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -766,7 +1037,10 @@ func (p *Player) SetChatBubble(text string, color uint32, drawDistance float32, 
 }
 
 func (p *Player) SetPosFindZ(x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -774,7 +1048,10 @@ func (p *Player) SetPosFindZ(x, y, z float32) bool {
 }
 
 func (p *Player) SetSkillLevel(weapon uint8, level int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -782,7 +1059,10 @@ func (p *Player) SetSkillLevel(weapon uint8, level int) bool {
 }
 
 func (p *Player) SetSpecialAction(action uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -790,7 +1070,10 @@ func (p *Player) SetSpecialAction(action uint32) bool {
 }
 
 func (p *Player) ShowNameTagForPlayer(other *Player, enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || other == nil || other.ptr == nil || other.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || other == nil || other.ptr == nil || other.GetID() == -1 {
 		return false
 	}
 
@@ -798,7 +1081,10 @@ func (p *Player) ShowNameTagForPlayer(other *Player, enable bool) bool {
 }
 
 func (p *Player) ToggleControllable(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -806,7 +1092,10 @@ func (p *Player) ToggleControllable(enable bool) bool {
 }
 
 func (p *Player) ToggleSpectating(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -814,7 +1103,10 @@ func (p *Player) ToggleSpectating(enable bool) bool {
 }
 
 func (p *Player) ApplyAnimation(animLib, animName string, delta float32, loop, lockX, lockY, freeze bool, time int, sync int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -828,7 +1120,10 @@ func (p *Player) ApplyAnimation(animLib, animName string, delta float32, loop, l
 }
 
 func (p *Player) EditAttachedObject(index int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -836,7 +1131,10 @@ func (p *Player) EditAttachedObject(index int) bool {
 }
 
 func (p *Player) EnableCameraTarget(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -844,7 +1142,10 @@ func (p *Player) EnableCameraTarget(enable bool) bool {
 }
 
 func (p *Player) EnableStuntBonus(enable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -852,7 +1153,10 @@ func (p *Player) EnableStuntBonus(enable bool) bool {
 }
 
 func (p *Player) GetPlayerAmmo() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -860,7 +1164,10 @@ func (p *Player) GetPlayerAmmo() int {
 }
 
 func (p *Player) GetAnimationIndex() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -868,7 +1175,10 @@ func (p *Player) GetAnimationIndex() int {
 }
 
 func (p *Player) GetFacingAngle() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -876,7 +1186,10 @@ func (p *Player) GetFacingAngle() float32 {
 }
 
 func (p *Player) GetSpecialAction() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -884,7 +1197,10 @@ func (p *Player) GetSpecialAction() int {
 }
 
 func (p *Player) GetVehicleID() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -892,7 +1208,10 @@ func (p *Player) GetVehicleID() int {
 }
 
 func (p *Player) GetVehicleSeat() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -900,7 +1219,10 @@ func (p *Player) GetVehicleSeat() int {
 }
 
 func (p *Player) GetWeaponData(slot int) (int, int, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, false
 	}
 
@@ -911,7 +1233,10 @@ func (p *Player) GetWeaponData(slot int) (int, int, bool) {
 }
 
 func (p *Player) GetWeaponState() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -919,7 +1244,10 @@ func (p *Player) GetWeaponState() int {
 }
 
 func (p *Player) InterpolateCameraPos(fromX, fromY, fromZ, toX, toY, toZ float32, time, cut int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -927,7 +1255,10 @@ func (p *Player) InterpolateCameraPos(fromX, fromY, fromZ, toX, toY, toZ float32
 }
 
 func (p *Player) InterpolateCameraLookAt(fromX, fromY, fromZ, toX, toY, toZ float32, time, cut int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -935,7 +1266,10 @@ func (p *Player) InterpolateCameraLookAt(fromX, fromY, fromZ, toX, toY, toZ floa
 }
 
 func (p *Player) IsPlayerAttachedObjectSlotUsed(index int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -943,7 +1277,10 @@ func (p *Player) IsPlayerAttachedObjectSlotUsed(index int) bool {
 }
 
 func (p *Player) AttachCameraToObject(object unsafe.Pointer) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -951,7 +1288,10 @@ func (p *Player) AttachCameraToObject(object unsafe.Pointer) bool {
 }
 
 func (p *Player) AttachCameraToPlayerObject(object unsafe.Pointer) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -959,7 +1299,10 @@ func (p *Player) AttachCameraToPlayerObject(object unsafe.Pointer) bool {
 }
 
 func (p *Player) GetCameraAspectRatio() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -967,7 +1310,10 @@ func (p *Player) GetCameraAspectRatio() float32 {
 }
 
 func (p *Player) GetCameraFrontVector() (float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -978,7 +1324,10 @@ func (p *Player) GetCameraFrontVector() (float32, float32, float32, bool) {
 }
 
 func (p *Player) GetCameraMode() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -986,7 +1335,10 @@ func (p *Player) GetCameraMode() int {
 }
 
 func (p *Player) GetKeys() (int, int, int, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -997,7 +1349,10 @@ func (p *Player) GetKeys() (int, int, int, bool) {
 }
 
 func (p *Player) GetSurfingVehicle() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1005,7 +1360,10 @@ func (p *Player) GetSurfingVehicle() unsafe.Pointer {
 }
 
 func (p *Player) GetSurfingObject() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1013,7 +1371,10 @@ func (p *Player) GetSurfingObject() unsafe.Pointer {
 }
 
 func (p *Player) GetTargetPlayer() *Player {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1021,7 +1382,10 @@ func (p *Player) GetTargetPlayer() *Player {
 }
 
 func (p *Player) GetTargetActor() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1029,7 +1393,10 @@ func (p *Player) GetTargetActor() unsafe.Pointer {
 }
 
 func (p *Player) IsInVehicle(vehicle unsafe.Pointer) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1037,7 +1404,10 @@ func (p *Player) IsInVehicle(vehicle unsafe.Pointer) bool {
 }
 
 func (p *Player) IsInAnyVehicle() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1045,7 +1415,10 @@ func (p *Player) IsInAnyVehicle() bool {
 }
 
 func (p *Player) IsInRangeOfPoint(rangeVal, x, y, z float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1053,7 +1426,10 @@ func (p *Player) IsInRangeOfPoint(rangeVal, x, y, z float32) bool {
 }
 
 func (p *Player) PlayCrimeReport(suspect *Player, crime int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || suspect == nil || suspect.ptr == nil || suspect.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || suspect == nil || suspect.ptr == nil || suspect.GetID() == -1 {
 		return false
 	}
 
@@ -1061,7 +1437,10 @@ func (p *Player) PlayCrimeReport(suspect *Player, crime int) bool {
 }
 
 func (p *Player) RemoveAttachedObject(index int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1069,7 +1448,10 @@ func (p *Player) RemoveAttachedObject(index int) bool {
 }
 
 func (p *Player) SetAttachedObject(index, modelid, bone int, offX, offY, offZ, rotX, rotY, rotZ, sclX, sclY, sclZ float32, color1, color2 uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1077,7 +1459,10 @@ func (p *Player) SetAttachedObject(index, modelid, bone int, offX, offY, offZ, r
 }
 
 func (p *Player) SetMarkerForPlayer(other *Player, color uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || other == nil || other.ptr == nil || other.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || other == nil || other.ptr == nil || other.GetID() == -1 {
 		return false
 	}
 
@@ -1085,7 +1470,10 @@ func (p *Player) SetMarkerForPlayer(other *Player, color uint32) bool {
 }
 
 func (p *Player) GetMarkerForPlayer(other *Player) uint32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || other == nil || other.ptr == nil || other.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || other == nil || other.ptr == nil || other.GetID() == -1 {
 		return 0
 	}
 
@@ -1093,7 +1481,10 @@ func (p *Player) GetMarkerForPlayer(other *Player) uint32 {
 }
 
 func (p *Player) AllowTeleport(allow bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1101,7 +1492,10 @@ func (p *Player) AllowTeleport(allow bool) bool {
 }
 
 func (p *Player) IsTeleportAllowed() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1109,7 +1503,10 @@ func (p *Player) IsTeleportAllowed() bool {
 }
 
 func (p *Player) DisableRemoteVehicleCollisions(disable bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1117,7 +1514,10 @@ func (p *Player) DisableRemoteVehicleCollisions(disable bool) bool {
 }
 
 func (p *Player) GetCameraZoom() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -1125,7 +1525,10 @@ func (p *Player) GetCameraZoom() float32 {
 }
 
 func (p *Player) SelectTextDraw(hoverColor uint32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1133,7 +1536,10 @@ func (p *Player) SelectTextDraw(hoverColor uint32) bool {
 }
 
 func (p *Player) CancelSelectTextDraw() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1141,7 +1547,10 @@ func (p *Player) CancelSelectTextDraw() bool {
 }
 
 func (p *Player) SendClientCheck(actionType, address, offset, count int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1149,7 +1558,10 @@ func (p *Player) SendClientCheck(actionType, address, offset, count int) bool {
 }
 
 func (p *Player) ShowGameText(text string, time, style int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1160,7 +1572,10 @@ func (p *Player) ShowGameText(text string, time, style int) bool {
 }
 
 func (p *Player) HideGameText(style int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1168,7 +1583,10 @@ func (p *Player) HideGameText(style int) bool {
 }
 
 func (p *Player) HasGameText(style int) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1176,7 +1594,10 @@ func (p *Player) HasGameText(style int) bool {
 }
 
 func (p *Player) GetGameText(style int) (string, int, int, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", 0, 0, false
 	}
 
@@ -1205,6 +1626,9 @@ func (p *Player) GetGameText(style int) (string, int, int, bool) {
 }
 
 func (p *Player) SendDeathMessage(killer, killee *Player, weapon int) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
 	var kPtr, kePtr unsafe.Pointer
 
 	if killer != nil && killer.ptr != nil && killer.GetID() != -1 {
@@ -1215,7 +1639,7 @@ func (p *Player) SendDeathMessage(killer, killee *Player, weapon int) bool {
 		kePtr = killee.ptr
 	}
 
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	if !p.isValid() {
 		return false
 	}
 
@@ -1223,7 +1647,10 @@ func (p *Player) SendDeathMessage(killer, killee *Player, weapon int) bool {
 }
 
 func (p *Player) SendMessageToPlayer(sender *Player, message string) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 || sender == nil || sender.ptr == nil || sender.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() || sender == nil || sender.ptr == nil || sender.GetID() == -1 {
 		return false
 	}
 
@@ -1234,7 +1661,10 @@ func (p *Player) SendMessageToPlayer(sender *Player, message string) bool {
 }
 
 func (p *Player) GetSkillLevel(skill int) int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1242,7 +1672,10 @@ func (p *Player) GetSkillLevel(skill int) int {
 }
 
 func (p *Player) GetZAim() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -1250,7 +1683,10 @@ func (p *Player) GetZAim() float32 {
 }
 
 func (p *Player) GetSurfingOffsets() (float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, false
 	}
 
@@ -1261,7 +1697,10 @@ func (p *Player) GetSurfingOffsets() (float32, float32, float32, bool) {
 }
 
 func (p *Player) GetRotationQuat() (float32, float32, float32, float32, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, 0, false
 	}
 
@@ -1272,7 +1711,10 @@ func (p *Player) GetRotationQuat() (float32, float32, float32, float32, bool) {
 }
 
 func (p *Player) GetPlayerSpectateID() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1280,7 +1722,10 @@ func (p *Player) GetPlayerSpectateID() int {
 }
 
 func (p *Player) GetSpectateType() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1288,7 +1733,10 @@ func (p *Player) GetSpectateType() int {
 }
 
 func (p *Player) GetRawIp() uint32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1296,7 +1744,10 @@ func (p *Player) GetRawIp() uint32 {
 }
 
 func (p *Player) SetGravity(gravity float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1304,7 +1755,10 @@ func (p *Player) SetGravity(gravity float32) bool {
 }
 
 func (p *Player) GetGravity() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -1312,7 +1766,10 @@ func (p *Player) GetGravity() float32 {
 }
 
 func (p *Player) IsAdmin() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1320,7 +1777,10 @@ func (p *Player) IsAdmin() bool {
 }
 
 func (p *Player) SetAdmin(set bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1328,7 +1788,12 @@ func (p *Player) SetAdmin(set bool) bool {
 }
 
 func (p *Player) Kick() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	fmt.Println("PLAYER ID?", p.GetID())
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1336,7 +1801,10 @@ func (p *Player) Kick() bool {
 }
 
 func (p *Player) Ban() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1344,7 +1812,10 @@ func (p *Player) Ban() bool {
 }
 
 func (p *Player) BanEx(reason string) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1355,7 +1826,10 @@ func (p *Player) BanEx(reason string) bool {
 }
 
 func (p *Player) Spawn() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1363,7 +1837,10 @@ func (p *Player) Spawn() bool {
 }
 
 func (p *Player) IsSpawned() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1371,7 +1848,10 @@ func (p *Player) IsSpawned() bool {
 }
 
 func (p *Player) IsControllable() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1379,7 +1859,10 @@ func (p *Player) IsControllable() bool {
 }
 
 func (p *Player) IsCameraTargetEnabled() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1387,7 +1870,10 @@ func (p *Player) IsCameraTargetEnabled() bool {
 }
 
 func (p *Player) ToggleGhostMode(toggle bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1395,7 +1881,10 @@ func (p *Player) ToggleGhostMode(toggle bool) bool {
 }
 
 func (p *Player) GetGhostMode() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1403,7 +1892,10 @@ func (p *Player) GetGhostMode() bool {
 }
 
 func (p *Player) AllowWeapons(allow bool) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1411,7 +1903,10 @@ func (p *Player) AllowWeapons(allow bool) bool {
 }
 
 func (p *Player) AreWeaponsAllowed() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1419,7 +1914,10 @@ func (p *Player) AreWeaponsAllowed() bool {
 }
 
 func (p *Player) IsPlayerUsingOfficialClient() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1427,7 +1925,10 @@ func (p *Player) IsPlayerUsingOfficialClient() bool {
 }
 
 func (p *Player) GetAnimationFlags() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1435,7 +1936,10 @@ func (p *Player) GetAnimationFlags() int {
 }
 
 func (p *Player) IsInDriveByMode() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1443,7 +1947,10 @@ func (p *Player) IsInDriveByMode() bool {
 }
 
 func (p *Player) IsCuffed() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1451,7 +1958,10 @@ func (p *Player) IsCuffed() bool {
 }
 
 func (p *Player) IsUsingOmp() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1459,7 +1969,10 @@ func (p *Player) IsUsingOmp() bool {
 }
 
 func (p *Player) IsInModShop() bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1467,7 +1980,10 @@ func (p *Player) IsInModShop() bool {
 }
 
 func (p *Player) GetSirenState() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1475,7 +1991,10 @@ func (p *Player) GetSirenState() int {
 }
 
 func (p *Player) GetLandingGearState() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1483,7 +2002,10 @@ func (p *Player) GetLandingGearState() int {
 }
 
 func (p *Player) GetHydraReactorAngle() uint32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1491,7 +2013,10 @@ func (p *Player) GetHydraReactorAngle() uint32 {
 }
 
 func (p *Player) GetTrainSpeed() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -1499,7 +2024,10 @@ func (p *Player) GetTrainSpeed() float32 {
 }
 
 func (p *Player) NetStatsBytesReceived() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1507,7 +2035,10 @@ func (p *Player) NetStatsBytesReceived() int {
 }
 
 func (p *Player) NetStatsBytesSent() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1515,7 +2046,10 @@ func (p *Player) NetStatsBytesSent() int {
 }
 
 func (p *Player) NetStatsConnectionStatus() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1523,7 +2057,10 @@ func (p *Player) NetStatsConnectionStatus() int {
 }
 
 func (p *Player) NetStatsGetConnectedTime() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1531,7 +2068,10 @@ func (p *Player) NetStatsGetConnectedTime() int {
 }
 
 func (p *Player) NetStatsPacketLossPercent() float32 {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0.0
 	}
 
@@ -1539,7 +2079,10 @@ func (p *Player) NetStatsPacketLossPercent() float32 {
 }
 
 func (p *Player) NetStatsMessagesReceived() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1547,7 +2090,10 @@ func (p *Player) NetStatsMessagesReceived() int {
 }
 
 func (p *Player) NetStatsMessagesRecvPerSecond() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1555,7 +2101,10 @@ func (p *Player) NetStatsMessagesRecvPerSecond() int {
 }
 
 func (p *Player) NetStatsMessagesSent() int {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0
 	}
 
@@ -1563,7 +2112,10 @@ func (p *Player) NetStatsMessagesSent() int {
 }
 
 func (p *Player) NetStatsGetIpPort() (string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", false
 	}
 
@@ -1578,7 +2130,10 @@ func (p *Player) NetStatsGetIpPort() (string, bool) {
 }
 
 func (p *Player) SetFacingAngle(angle float32) bool {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return false
 	}
 
@@ -1586,7 +2141,10 @@ func (p *Player) SetFacingAngle(angle float32) bool {
 }
 
 func (p *Player) GetIp() (string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", false
 	}
 
@@ -1601,7 +2159,10 @@ func (p *Player) GetIp() (string, bool) {
 }
 
 func (p *Player) GPCI() (string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", false
 	}
 
@@ -1616,7 +2177,10 @@ func (p *Player) GPCI() (string, bool) {
 }
 
 func (p *Player) GetVersion() (string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return "", false
 	}
 
@@ -1631,7 +2195,10 @@ func (p *Player) GetVersion() (string, bool) {
 }
 
 func (p *Player) GetMenu() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1639,7 +2206,10 @@ func (p *Player) GetMenu() unsafe.Pointer {
 }
 
 func (p *Player) GetSurfingPlayerObject() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1647,7 +2217,10 @@ func (p *Player) GetSurfingPlayerObject() unsafe.Pointer {
 }
 
 func (p *Player) GetCameraTargetPlayerObject() unsafe.Pointer {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return nil
 	}
 
@@ -1655,7 +2228,10 @@ func (p *Player) GetCameraTargetPlayerObject() unsafe.Pointer {
 }
 
 func (p *Player) GetAttachedObject(index int) (int, int, float32, float32, float32, float32, float32, float32, float32, float32, float32, int, int, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false
 	}
 
@@ -1683,7 +2259,10 @@ func (p *Player) GetAttachedObject(index int) (int, int, float32, float32, float
 }
 
 func (p *Player) GetDialogData() (int, int, string, string, string, string, bool) {
-	if p == nil || p.ptr == nil || p.GetID() == -1 {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
 		return 0, 0, "", "", "", "", false
 	}
 

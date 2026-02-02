@@ -19,8 +19,11 @@ package gomp
 */
 import "C"
 import (
+	"sync"
 	"unsafe"
 )
+
+var apiMutex sync.Mutex
 
 func SetComponentVersion(major, minor, patch uint8, prerel uint16) {
 	C.setComponentVersion(C.uint8_t(major), C.uint8_t(minor), C.uint8_t(patch), C.uint16_t(prerel))
