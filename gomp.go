@@ -15,6 +15,7 @@ package gomp
 #include "vehicle.c"
 #include "event.c"
 #include "core.c"
+#include "all.c"
 
 #endif
 */
