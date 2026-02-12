@@ -188,7 +188,7 @@ type EventPlayerShotPlayerObject struct {
 
 type EventPlayerPickUpPickup struct {
 	Player *Player
-	Pickup unsafe.Pointer
+	Pickup *Pickup
 }
 
 type EventPlayerObjectMove struct {
@@ -839,7 +839,7 @@ func onPlayerShotPlayerObject(args *C.struct_EventArgs_onPlayerShotPlayerObject)
 func onPlayerPickUpPickup(args *C.struct_EventArgs_onPlayerPickUpPickup) C.bool {
 	data := EventPlayerPickUpPickup{
 		Player: playerFromPointer(*args.list.player),
-		Pickup: *args.list.pickup,
+		Pickup: pickupFromPointer(*args.list.pickup),
 	}
 
 	emmitEvent(data)

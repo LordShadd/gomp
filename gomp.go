@@ -16,6 +16,7 @@ package gomp
 #include "event.c"
 #include "core.c"
 #include "all.c"
+#include "pickup.c"
 
 #endif
 */
