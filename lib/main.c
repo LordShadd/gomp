@@ -19,10 +19,8 @@ void setComponentName(char *name) {
   componentName = strdup(name);
 }
 
-void _onReady() { printf("onReady\n"); }
-void _onReset() { printf("onReset\n"); }
 void _onFree() {
-  printf("onFree\n");
+  onFree();
 
   if (componentName != NULL) {
     free(componentName);
@@ -43,7 +41,7 @@ OMP_API_EXPORT void *ComponentEntryPoint() {
 
   void *comp =
       api.Component.Create(0x913B89092F8F6A68, componentName, componentVersion,
-                           &_onReady, &_onReset, &_onFree);
+                           &onReady, &onReset, &_onFree);
 
   return comp;
 }

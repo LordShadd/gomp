@@ -9,13 +9,13 @@
 
 extern struct OMPAPI_t api;
 
-void _onReady();
-void _onReset();
-void _onFree();
-
 void setComponentVersion(uint8_t major, uint8_t minor, uint8_t patch,
                          uint16_t prerel);
 void setComponentName(char *name);
+
+extern void onReady();
+extern void onReset();
+extern void onFree();
 
 extern bool onPlayerConnect(struct EventArgs_onPlayerConnect *args);
 extern bool onPlayerDisconnect(struct EventArgs_onPlayerDisconnect *args);
