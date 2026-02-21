@@ -16,16 +16,16 @@ func init() {
 		gomp.UsePedAnims()
 	})
 
-	gomp.OnEvent(func(data gomp.EventPlayerRequestClass) {
-		data.Player.Spawn()
+	gomp.OnEvent(func(event gomp.EventPlayerRequestClass) {
+		event.Player.Spawn()
 	})
 
-	gomp.OnEvent(func(data gomp.EventPlayerCommandText) {
-		if strings.HasPrefix(data.Command, "/skin") {
+	gomp.OnEvent(func(event gomp.EventPlayerCommandText) {
+		if strings.HasPrefix(event.Command, "/skin") {
 			var skinID int
 			var err error
 
-			split := strings.Split(data.Command, " ")
+			split := strings.Split(event.Command, " ")
 
 			if len(split) > 1 {
 				skinID, err = strconv.Atoi(split[1])
@@ -35,22 +35,22 @@ func init() {
 				}
 			}
 
-			data.Player.SetSkin(skinID)
+			event.Player.SetSkin(skinID)
 
 			return
 		}
 
-		if strings.HasPrefix(data.Command, "/spawn") {
-			data.Player.Spawn()
+		if strings.HasPrefix(event.Command, "/spawn") {
+			event.Player.Spawn()
 
 			return
 		}
 
-		if strings.HasPrefix(data.Command, "/veh") {
+		if strings.HasPrefix(event.Command, "/veh") {
 			var modelID int = 415
 			var err error
 
-			split := strings.Split(data.Command, " ")
+			split := strings.Split(event.Command, " ")
 
 			if len(split) > 1 {
 				modelID, err = strconv.Atoi(split[1])
@@ -60,10 +60,10 @@ func init() {
 				}
 			}
 
-			x, y, z, _ := data.Player.GetPos()
-			angle := data.Player.GetFacingAngle()
+			x, y, z, _ := event.Player.GetPos()
+			angle := event.Player.GetFacingAngle()
 
-			oldVeh := data.Player.GetVehicle()
+			oldVeh := event.Player.GetVehicle()
 			oldVehAngle := oldVeh.GetZAngle()
 
 			vx, vy, vz, _ := oldVeh.GetVelocity()
@@ -79,13 +79,13 @@ func init() {
 				return
 			}
 
-			data.Player.PutInVehicle(vehicle, 0)
+			event.Player.PutInVehicle(vehicle, 0)
 			vehicle.SetVelocity(vx, vy, vz)
 		}
 	})
 
-	gomp.OnEvent(func(data gomp.EventPlayerConnect) {
-		name, _ := data.Player.GetName()
+	gomp.OnEvent(func(event gomp.EventPlayerConnect) {
+		name, _ := event.Player.GetName()
 
 		fmt.Printf("Player %s joined.\n", name)
 	})
