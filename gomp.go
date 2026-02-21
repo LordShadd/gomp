@@ -13,6 +13,7 @@ package gomp
 #include "main.c"
 #include "player.c"
 #include "vehicle.c"
+#include "object.c"
 #include "event.c"
 #include "core.c"
 #include "all.c"
