@@ -29,7 +29,7 @@ const (
 	eventPriorityLowest
 )
 
-var eventHandlers map[reflect.Type][]reflect.Value = make(map[reflect.Type][]reflect.Value)
+var eventHandlers map[reflect.Type][]any = make(map[reflect.Type][]any)
 
 type EventPlayerConnect struct {
 	Player *Player
@@ -395,23 +395,12 @@ type EventEnterExitModShop struct {
 	InteriorID int
 }
 
-type EventHandler func(data any)
+func OnEvent[T any](handler func(event T)) {
+	t := reflect.TypeFor[T]()
 
-func OnEvent(handler any) {
-	handlerType := reflect.TypeOf(handler)
-	handlerValue := reflect.ValueOf(handler)
+	list, _ := eventHandlers[t]
 
-	if handlerType.Kind() != reflect.Func && handlerType.NumIn() != 1 {
-		panic("Event handler should be a function with event data argument")
-	}
-
-	argType := handlerType.In(0)
-
-	if eventHandlers[argType] == nil {
-		eventHandlers[argType] = []reflect.Value{}
-	}
-
-	eventHandlers[argType] = append(eventHandlers[argType], handlerValue)
+	eventHandlers[t] = append(list, handler)
 }
 
 func addHandler(name string, priority eventPriority, fnPtr unsafe.Pointer) {
@@ -421,16 +410,13 @@ func addHandler(name string, priority eventPriority, fnPtr unsafe.Pointer) {
 	C.Event_AddHandler(cName, C.int(priority), fnPtr)
 }
 
-func emitEvent(event any) {
-	handlers, ok := eventHandlers[reflect.TypeOf(event)]
+func emitEvent[T any](event T) {
+	t := reflect.TypeFor[T]()
 
-	if !ok {
-		return
-	}
-
-	args := []reflect.Value{reflect.ValueOf(event)}
-	for _, handler := range handlers {
-		handler.Call(args)
+	if handlers, ok := eventHandlers[t]; ok {
+		for _, handler := range handlers {
+			handler.(func(event T))(event)
+		}
 	}
 }
 
