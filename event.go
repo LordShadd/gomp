@@ -386,7 +386,7 @@ type EventActorStreamOut struct {
 }
 
 type EventObjectMove struct {
-	Object unsafe.Pointer
+	Object *Object
 }
 
 type EventEnterExitModShop struct {
@@ -1259,7 +1259,7 @@ func onActorStreamOut(args *C.struct_EventArgs_onActorStreamOut) C.bool {
 //export onObjectMove
 func onObjectMove(args *C.struct_EventArgs_onObjectMove) C.bool {
 	data := EventObjectMove{
-		Object: *args.list.object,
+		Object: objectFromPointer(*args.list.object),
 	}
 
 	emmitEvent(data)
