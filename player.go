@@ -11,6 +11,7 @@ package gomp
 #include "main.h"
 #include "player.h"
 #include "vehicle.h"
+#include "npc.h"
 
 #endif
 */
@@ -2303,4 +2304,25 @@ func (p *Player) GetDialogData() (int, int, string, string, string, string, bool
 	b2 := C.GoStringN(b2View.data, C.int(b2View.len))
 
 	return int(dialogID), int(style), title, body, b1, b2, true
+}
+
+func (p *Player) AsNPC() (*NPC, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return nil, false
+	}
+
+	if !bool(C.Player_IsNPC(p.ptr)) {
+		return nil, false
+	}
+
+	npcPtr := C.NPC_FromID(C.Player_GetID(p.ptr))
+
+	if npcPtr == nil {
+		return nil, false
+	}
+
+	return &NPC{npcPtr}, true
 }
