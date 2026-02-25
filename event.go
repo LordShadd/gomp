@@ -136,7 +136,7 @@ type EventPlayerTakeDamage struct {
 
 type EventPlayerGiveDamageActor struct {
 	Player   *Player
-	Actor    unsafe.Pointer
+	Actor    *Actor
 	Amount   float32
 	Weapon   int
 	BodyPart int
@@ -376,12 +376,12 @@ type EventTrailerUpdate struct {
 }
 
 type EventActorStreamIn struct {
-	Actor     unsafe.Pointer
+	Actor     *Actor
 	ForPlayer *Player
 }
 
 type EventActorStreamOut struct {
-	Actor     unsafe.Pointer
+	Actor     *Actor
 	ForPlayer *Player
 }
 
@@ -731,7 +731,7 @@ func onPlayerTakeDamage(args *C.struct_EventArgs_onPlayerTakeDamage) C.bool {
 func onPlayerGiveDamageActor(args *C.struct_EventArgs_onPlayerGiveDamageActor) C.bool {
 	event := EventPlayerGiveDamageActor{
 		Player:   playerFromPointer(*args.list.player),
-		Actor:    *args.list.actor,
+		Actor:    actorFromPointer(*args.list.actor),
 		Amount:   float32(*args.list.amount),
 		Weapon:   int(*args.list.weapon),
 		BodyPart: int(*args.list.part),
@@ -1221,7 +1221,7 @@ func onTrailerUpdate(args *C.struct_EventArgs_onTrailerUpdate) C.bool {
 //export onActorStreamIn
 func onActorStreamIn(args *C.struct_EventArgs_onActorStreamIn) C.bool {
 	event := EventActorStreamIn{
-		Actor:     *args.list.actor,
+		Actor:     actorFromPointer(*args.list.actor),
 		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
@@ -1233,7 +1233,7 @@ func onActorStreamIn(args *C.struct_EventArgs_onActorStreamIn) C.bool {
 //export onActorStreamOut
 func onActorStreamOut(args *C.struct_EventArgs_onActorStreamOut) C.bool {
 	event := EventActorStreamOut{
-		Actor:     *args.list.actor,
+		Actor:     actorFromPointer(*args.list.actor),
 		ForPlayer: playerFromPointer(*args.list.forPlayer),
 	}
 
