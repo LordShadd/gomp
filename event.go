@@ -248,7 +248,7 @@ type EventPlayerClickTextDraw struct {
 
 type EventPlayerClickPlayerTextDraw struct {
 	Player         *Player
-	PlayerTextDraw unsafe.Pointer
+	PlayerTextDraw *PlayerTextDraw
 }
 
 type EventPlayerClickPlayer struct {
@@ -932,9 +932,11 @@ func onPlayerClickTextDraw(args *C.struct_EventArgs_onPlayerClickTextDraw) C.boo
 
 //export onPlayerClickPlayerTextDraw
 func onPlayerClickPlayerTextDraw(args *C.struct_EventArgs_onPlayerClickPlayerTextDraw) C.bool {
+	player := playerFromPointer(*args.list.player)
+
 	event := EventPlayerClickPlayerTextDraw{
-		Player:         playerFromPointer(*args.list.player),
-		PlayerTextDraw: *args.list.textdraw,
+		Player:         player,
+		PlayerTextDraw: playerTextDrawFromPointer(player, *args.list.textdraw),
 	}
 
 	emitEvent(event)
