@@ -21,6 +21,7 @@ package gomp
 #include "pickup.c"
 #include "npc.c"
 #include "textdraw.c"
+#include "playertextdraw.c"
 
 #endif
 */
