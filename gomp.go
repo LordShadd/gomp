@@ -20,6 +20,7 @@ package gomp
 #include "all.c"
 #include "pickup.c"
 #include "npc.c"
+#include "textdraw.c"
 
 #endif
 */
