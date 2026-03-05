@@ -19,6 +19,7 @@ package gomp
 #include "core.c"
 #include "all.c"
 #include "pickup.c"
+#include "npc.c"
 
 #endif
 */
