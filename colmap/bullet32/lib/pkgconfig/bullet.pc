@@ -1,4 +1,4 @@
-prefix=/home/david/Projects/Personal/Golang/gomp/bullet32
+prefix=${pcfiledir}/../..
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include/bullet
