@@ -12,6 +12,8 @@ package gomp
 #include "player.h"
 #include "vehicle.h"
 #include "npc.h"
+#include "checkpoint.h"
+#include "racecheckpoint.h"
 
 #endif
 */
@@ -2325,4 +2327,120 @@ func (p *Player) AsNPC() (*NPC, bool) {
 	}
 
 	return &NPC{npcPtr}, true
+}
+
+func (p *Player) SetCheckpoint(x, y, z, radius float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.Checkpoint_Set(p.ptr, C.float(x), C.float(y), C.float(z), C.float(radius)))
+}
+
+func (p *Player) DisableCheckpoint() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.Checkpoint_Disable(p.ptr))
+}
+
+func (p *Player) IsInCheckpoint() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.Checkpoint_IsPlayerIn(p.ptr))
+}
+
+func (p *Player) IsCheckpointActive() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.Checkpoint_IsActive(p.ptr))
+}
+
+func (p *Player) GetCheckpoint() (float32, float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return 0, 0, 0, 0, false
+	}
+
+	var x, y, z, radius C.float
+	ret := C.Checkpoint_Get(p.ptr, &x, &y, &z, &radius)
+
+	return float32(x), float32(y), float32(z), float32(radius), bool(ret)
+}
+
+func (p *Player) SetRaceCheckpoint(typeID int, x, y, z, nextX, nextY, nextZ, radius float32) bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.RaceCheckpoint_Set(p.ptr, C.int(typeID), C.float(x), C.float(y), C.float(z), C.float(nextX), C.float(nextY), C.float(nextZ), C.float(radius)))
+}
+
+func (p *Player) DisableRaceCheckpoint() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.RaceCheckpoint_Disable(p.ptr))
+}
+
+func (p *Player) IsInRaceCheckpoint() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.RaceCheckpoint_IsPlayerIn(p.ptr))
+}
+
+func (p *Player) IsRaceCheckpointActive() bool {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return false
+	}
+
+	return bool(C.RaceCheckpoint_IsActive(p.ptr))
+}
+
+func (p *Player) GetRaceCheckpoint() (float32, float32, float32, float32, float32, float32, float32, bool) {
+	apiMutex.Lock()
+	defer apiMutex.Unlock()
+
+	if !p.isValid() {
+		return 0, 0, 0, 0, 0, 0, 0, false
+	}
+
+	var x, y, z, nextX, nextY, nextZ, radius C.float
+	ret := C.RaceCheckpoint_Get(p.ptr, &x, &y, &z, &nextX, &nextY, &nextZ, &radius)
+
+	return float32(x), float32(y), float32(z), float32(nextX), float32(nextY), float32(nextZ), float32(radius), bool(ret)
 }

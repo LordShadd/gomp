@@ -22,6 +22,8 @@ package gomp
 #include "npc.c"
 #include "textdraw.c"
 #include "playertextdraw.c"
+#include "checkpoint.c"
+#include "racecheckpoint.c"
 
 #endif
 */

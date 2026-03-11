@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 int Player_NetStatsBytesReceived(void *player);
 int Player_NetStatsBytesSent(void *player);
 int Player_NetStatsConnectionStatus(void *player);
