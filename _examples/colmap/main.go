@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/LordShadd/gomp"
-	"github.com/LordShadd/gomp/colmap"
+	"github.com/LordShadd/gomp/builtin/colmap"
 )
 
 func init() {
